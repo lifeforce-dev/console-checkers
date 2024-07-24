@@ -1,0 +1,10 @@
+{
+    "WELCOME_MESSAGE": {
+      "text": "Welcome to Checkers!",
+      "comment": "Displayed as the opening message when the game starts."
+    },
+    "GLYPH_BOARD_SLOT": {
+      "text": "[{}]",
+      "comment": "This is how a board square will be represented. ex. [b][.][B]"
+    }
+  }
