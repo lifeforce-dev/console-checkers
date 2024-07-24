@@ -24,6 +24,10 @@ Game::Game()
 	// Creates both players.
 	m_playerStates.push_back(std::make_unique<PlayerState>(Identity::Red));
 	m_playerStates.push_back(std::make_unique<PlayerState>(Identity::Black));
+
+	// TODO: Its not obvious that we CANNOT fire off UI events in here. Display
+	// is not alive yet. But we don't know that. Our owner should probably tell us.
+	// Or Display could via UI events but that seems a bit out of place.
 }
 
 Game::~Game() = default;
