@@ -33,6 +33,7 @@ workspace (_OPTIONS["sln_name"])
 architecture "x64"
 configurations { "Debug", "Release" }
 cppdialect "C++20"
+disablewarnings { "4996" }
 
 group "contrib"
 for name, pkg in pairs(package_info.packages) do
