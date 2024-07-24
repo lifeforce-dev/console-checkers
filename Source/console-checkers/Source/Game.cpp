@@ -5,6 +5,7 @@
 
 #include "Game.h"
 
+#include "ChessLikeView.h"
 #include "ConsoleInputComponent.h"
 #include "GameState.h"
 #include "GameTypes.h"
@@ -18,6 +19,7 @@ namespace Checkers {
 Game::Game()
 	: m_inputComponent(std::make_unique<ConsoleInputComponent>())
 	, m_gameState(std::make_unique<GameState>())
+	, m_chessLikeGameView(std::make_unique<ChessLikeView>())
 {
 	// Creates both players.
 	m_playerStates.push_back(std::make_unique<PlayerState>(Identity::Red));
@@ -28,8 +30,11 @@ Game::~Game() = default;
 
 void Game::Run()
 {
+	m_uiPromptRequestedEvents.GetGameBoardViewStrategyChangedEvent().notify(m_chessLikeGameView.get());
 	m_uiPromptRequestedEvents.GetWelcomePromptRequestedEvent().notify();
+
 	m_gameState->ToggleTurnPlayer();
+
 	while (m_gameState->GetWinState() == WinConditionReason::None)
 	{
 		// NYI

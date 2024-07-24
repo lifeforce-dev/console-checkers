@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "UIPromptRequestedEvents.h"
+#include "UIEvents.h"
 
 #include <memory>
 #include <vector>
@@ -18,6 +18,7 @@ class GameState;
 class PlayerState;
 class ConsoleInputComponent;
 class ConsoleGameDisplay;
+class ChessLikeView;
 
 class Game
 {
@@ -33,7 +34,7 @@ public:
 
 	// Getters
 	GameState* GetGameState() const { return m_gameState.get(); }
-	UIPromptRequestedEvents& GetUIPrompRequestedEvents() { return m_uiPromptRequestedEvents; }
+	UIEvents& GetUIPrompRequestedEvents() { return m_uiPromptRequestedEvents; }
 
 	// Runs the game until a win condition is met.
 	void Run();
@@ -50,7 +51,11 @@ private:
 	std::vector<std::unique_ptr<PlayerState>> m_playerStates;
 
 	// Events specifically for the Display to listen for.
-	UIPromptRequestedEvents m_uiPromptRequestedEvents;
+	UIEvents m_uiPromptRequestedEvents;
+
+	// Game board views. Changes how the board is represented, and can be changed by the player.
+	std::unique_ptr<ChessLikeView> m_chessLikeGameView = nullptr;
+	// TODO: std::unique_ptr<CheckersNotationView> m_chessLikeGameView = nullptr;
 };
 
 //===============================================================

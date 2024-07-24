@@ -19,9 +19,9 @@ public:
 	IGameBoardViewStrategy& operator=(const IGameBoardViewStrategy& other) = delete;
 
 	IGameBoardViewStrategy() = default;
-	virtual ~IGameBoardViewStrategy() = default;
 	IGameBoardViewStrategy(IGameBoardViewStrategy&& other) noexcept = default;
 	IGameBoardViewStrategy& operator=(IGameBoardViewStrategy&& other) noexcept = default;
+	virtual ~IGameBoardViewStrategy() = default;
 
 	// Gets the textual representation of the game board data.
 	[[nodiscard]]
