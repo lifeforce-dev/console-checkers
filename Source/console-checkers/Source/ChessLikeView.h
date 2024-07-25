@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include "ChessLikeView.h"
 
 #include "IGameBoardViewStrategy.h"
 
@@ -32,7 +31,6 @@ public:
 	[[nodiscard]]
 	int32_t GameBoardPositionToIndex(const std::string& position) const override;
 };
-
 
 //===============================================================
 

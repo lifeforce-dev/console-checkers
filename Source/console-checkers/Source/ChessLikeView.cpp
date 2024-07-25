@@ -38,7 +38,7 @@ static const std::unordered_map<Piece, char, PieceHash> s_glyphMap = {
 // Returns the string representation of an entire piece, including the [].
 static std::string GetGlyphForPiece(const Piece& piece) {
 
-	auto it = s_glyphMap.find(piece);
+	const auto it = s_glyphMap.find(piece);
 	if (it != s_glyphMap.end()) {
 		return fmt::format(UIText::s_glyphBoardSlot, it->second);
 	}
@@ -87,7 +87,7 @@ std::string ChessLikeView::GetGameBoardDisplayText(const std::vector<Piece>& gam
 		ss << currentRowHeader--;
 		for (int col = 0; col < GameplaySettings::s_boardSize; ++col)
 		{
-			int index = row * GameplaySettings::s_boardSize + col;
+			const int index = row * GameplaySettings::s_boardSize + col;
 			ss << GetGlyphForPiece(gameBoard[index]);
 		}
 
