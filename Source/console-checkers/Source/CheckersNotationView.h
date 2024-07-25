@@ -11,9 +11,15 @@ namespace Checkers {
 
 //===============================================================
 
-class CheckersNotationView : public IGameBoardViewStrategy
-{
+class CheckersNotationView final : public IGameBoardViewStrategy {
 public:
+	CheckersNotationView(const CheckersNotationView& other) = delete;
+	CheckersNotationView& operator=(const CheckersNotationView& other) = delete;
+
+	CheckersNotationView() = default;
+	CheckersNotationView(CheckersNotationView&& other) noexcept = default;
+	CheckersNotationView& operator=(CheckersNotationView&& other) noexcept = default;
+	virtual ~CheckersNotationView() override;
 
 	// Returns the textual representation of the board with checkers notation using colored numbers instead of glyphs.
 	[[nodiscard]]

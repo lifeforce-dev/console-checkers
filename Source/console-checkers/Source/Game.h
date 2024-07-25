@@ -15,10 +15,11 @@ namespace Checkers {
 //===============================================================
 
 class GameState;
-class PlayerState;
-class ConsoleInputComponent;
-class ConsoleGameDisplay;
+class CheckersNotationView;
 class ChessLikeView;
+class ConsoleGameDisplay;
+class ConsoleInputComponent;
+class PlayerState;
 
 class Game
 {
@@ -55,7 +56,7 @@ private:
 
 	// Game board views. Changes how the board is represented, and can be changed by the player.
 	std::unique_ptr<ChessLikeView> m_chessLikeGameView = nullptr;
-	// TODO: std::unique_ptr<CheckersNotationView> m_chessLikeGameView = nullptr;
+	std::unique_ptr<CheckersNotationView> m_checkersNotationView = nullptr;
 };
 
 //===============================================================
