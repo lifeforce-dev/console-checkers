@@ -24,11 +24,9 @@ public:
 	virtual ~IGameBoardViewStrategy() = default;
 
 	// Gets the textual representation of the game board data.
-	[[nodiscard]]
 	virtual std::string GetGameBoardDisplayText(const std::vector<Piece>& gameBoard) const = 0;
 
 	// Takes a formatted player-facing board position string and returns a game board index.
-	[[nodiscard]]
 	virtual int32_t GameBoardPositionToIndex(const std::string& position) const = 0;
 };
 
