@@ -28,6 +28,9 @@ public:
 
 	// Translates from chess coordinates that the player sees, to an index our game can use.
 	int32_t GameBoardPositionToIndex(const std::string& position) const override;
+
+	// This view deals in chess like coordinates for piece positions.
+	std::string_view GetMoveCommandSyntax() const override;
 };
 
 //===============================================================

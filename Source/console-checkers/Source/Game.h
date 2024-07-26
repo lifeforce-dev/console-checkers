@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include "GameTypes.h"
 #include "UIEvents.h"
 
 #include <memory>
@@ -15,10 +16,10 @@ namespace Checkers {
 //===============================================================
 
 class GameState;
-class CheckersNotationView;
-class ChessLikeView;
 class ConsoleGameDisplay;
 class ConsoleInputComponent;
+class GameBoardViewStrategyRegistry;
+class IGameBoardViewStrategy;
 class PlayerState;
 
 class Game
@@ -34,8 +35,12 @@ public:
 	~Game();
 
 	// Getters
+	IGameBoardViewStrategy* GetSelectedGameBoardViewStrategy() const { return m_selectedGameBoardViewStrategy; }
 	GameState* GetGameState() const { return m_gameState.get(); }
 	UIEvents& GetUIPrompRequestedEvents() { return m_uiPromptRequestedEvents; }
+
+	// Setters
+	void SetSelectedGameBoardViewStrategy(GameBoardViewStrategyId id);
 
 	// Runs the game until a win condition is met.
 	void Run();
@@ -51,12 +56,14 @@ private:
 	// Each player has a state object with info specific to that player. This list holds each player.
 	std::vector<std::unique_ptr<PlayerState>> m_playerStates;
 
+	// Registry of our available view strategies.
+	std::unique_ptr<GameBoardViewStrategyRegistry> m_gameBoardViewStrategyRegistry = nullptr;
+
 	// Events specifically for the Display to listen for.
 	UIEvents m_uiPromptRequestedEvents;
 
-	// Game board views. Changes how the board is represented, and can be changed by the player.
-	std::unique_ptr<ChessLikeView> m_chessLikeGameView = nullptr;
-	std::unique_ptr<CheckersNotationView> m_checkersNotationView = nullptr;
+	// Determines how the game data is displayed to the user, and translates move string formats to game input.
+	IGameBoardViewStrategy* m_selectedGameBoardViewStrategy = nullptr;
 };
 
 //===============================================================

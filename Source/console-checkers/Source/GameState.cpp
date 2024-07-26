@@ -6,10 +6,11 @@
 #include "GameSettings.h"
 #include "GameState.h"
 
-#include "spdlog/spdlog.h"
+#include <spdlog/spdlog.h>
 
-// Needed for spdlog to log a custom type.
-#include "spdlog/fmt/ostr.h"
+// Magic include needed for spdlog to log a custom type.
+// Must be included after spdlog.h. Thanks spdlog.
+#include <spdlog/fmt/ostr.h>
 
 namespace Checkers {
 

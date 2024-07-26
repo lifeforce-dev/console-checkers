@@ -37,7 +37,21 @@ void ConsoleGameDisplay::Initialize(IGameStateDisplayInfo* displayData, UIEvents
 	events.GetGameBoardViewStrategyChangedEvent().subscribe(
 		[this](IGameBoardViewStrategy* view)
 	{
+		IGameBoardViewStrategy* old = m_gameBoardView;
 		m_gameBoardView = view;
+
+		// We assume that if we didn't have a view before, this call was initialization
+		// and not a change.
+		if (old)
+		{
+			// We only want to reprint the board if our view actually changed
+			std::cout << GetGameBoardDisplay();
+		}
+	});
+
+	events.GetHelpPromptRequestedEvent().subscribe([this]()
+	{
+		std::cout << fmt::format(UIText::s_helpCommandPromptMessage, m_gameBoardView->GetMoveCommandSyntax());
 	});
 
 	m_isInitialized = true;

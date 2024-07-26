@@ -60,6 +60,9 @@ struct GameplaySettings {
 
 	// The board size is n x n.
 	static constexpr int32_t s_boardSize = 8;
+
+	// Default game board view strat.
+	static constexpr GameBoardViewStrategyId s_defaultGameBoardViewStrategy = GameBoardViewStrategyId::CheckersNotation;
 };
 
 struct GameMoveCommandSettings {

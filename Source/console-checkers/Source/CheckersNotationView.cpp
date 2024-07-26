@@ -109,6 +109,11 @@ int32_t CheckersNotationView::GameBoardPositionToIndex(const std::string& positi
 	return 0;
 }
 
+std::string_view CheckersNotationView::GetMoveCommandSyntax() const
+{
+	return UIText::s_moveCommandHelpExampleCheckersNotation;
+}
+
 //===============================================================
 
 }

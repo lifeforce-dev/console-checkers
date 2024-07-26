@@ -103,6 +103,11 @@ int32_t ChessLikeView::GameBoardPositionToIndex(const std::string& position) con
 	return 0;
 }
 
+std::string_view ChessLikeView::GetMoveCommandSyntax() const
+{
+	return UIText::s_moveCommandHelpExampleChessLikeView;
+}
+
 //===============================================================
 
 }

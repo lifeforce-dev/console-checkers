@@ -113,6 +113,48 @@ enum class Affinity : int32_t
 	Friendly
 };
 
+// A view strategy is responsible for implementing and translating between
+// what the player sees and what the game understands. This enum identifies a
+// particular view strategy.
+enum class GameBoardViewStrategyId
+{
+	// Start of the options.
+	Begin = 0,
+
+	// Displays board with chess notation and glyphs, and understand how to interpret input in that format.
+	ChessLikeView,
+
+	// Displays board with checkers notation, and understand how to interpret input in that format.
+	CheckersNotation,
+
+	// Number of options.
+	End = 3
+};
+
+inline std::ostream& operator<<(std::ostream& os, GameBoardViewStrategyId id)
+{
+	switch (id)
+	{
+	case GameBoardViewStrategyId::ChessLikeView:
+		os << "ChessLikeView";
+		break;
+	case GameBoardViewStrategyId::CheckersNotation:
+		os << "CheckersNotation";
+		break;
+	case GameBoardViewStrategyId::Begin:
+		os << "(Begin) Invalid";
+		break;
+	case GameBoardViewStrategyId::End:
+		os << "(End) Invalid";
+		break;
+	default:
+		os << "Invalid";
+		break;
+	}
+	return os;
+}
+
+
 //===============================================================
 
 }

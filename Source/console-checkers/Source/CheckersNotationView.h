@@ -26,6 +26,9 @@ public:
 
 	// Given a string with a checkers coordinate the player understands, returns an index the game can understand.
 	int32_t GameBoardPositionToIndex(const std::string& position) const override;
+
+	// This view deals with single value positions on the board.
+	std::string_view GetMoveCommandSyntax() const override;
 };
 
 //===============================================================
