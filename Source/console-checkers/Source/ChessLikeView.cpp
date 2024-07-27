@@ -62,6 +62,8 @@ static size_t GetPieceGlyphSize()
 	return glyphSize;
 }
 
+
+ChessLikeView::ChessLikeView() = default;
 ChessLikeView::~ChessLikeView() = default;
 
 std::string ChessLikeView::GetGameBoardDisplayText(const std::vector<Piece>& gameBoard) const

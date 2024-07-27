@@ -23,46 +23,67 @@ namespace Checkers {
 
 //===============================================================
 
-class GameBoardViewStrategyRegistry
+GameBoardViewStrategyRegistry::GameBoardViewStrategyRegistry()
 {
-public:
-	GameBoardViewStrategyRegistry(const GameBoardViewStrategyRegistry& other) = delete;
-	GameBoardViewStrategyRegistry& operator=(const GameBoardViewStrategyRegistry& other) = delete;
-	GameBoardViewStrategyRegistry(GameBoardViewStrategyRegistry&& other) noexcept = default;
-	GameBoardViewStrategyRegistry& operator=(GameBoardViewStrategyRegistry&& other) noexcept = default;
+	m_registeredGameBoardViews.push_back(std::make_unique<CheckersNotationView>());
+	m_registeredGameBoardViews.push_back(std::make_unique<ChessLikeView>());
+}
 
-	GameBoardViewStrategyRegistry()
+const std::vector<std::unique_ptr<IGameBoardViewStrategy>>& GameBoardViewStrategyRegistry::GetRegisteredViews() const
+{
+	return m_registeredGameBoardViews;
+}
+
+bool GameBoardViewStrategyRegistry::IsRegisteredView(GameBoardViewStrategyId id) const
+{
+	auto it = std::find_if(std::cbegin(m_registeredGameBoardViews),
+		std::cend(m_registeredGameBoardViews),
+		[id](const std::unique_ptr<IGameBoardViewStrategy>& view)
 	{
-		m_registeredGameBoardViews[GameBoardViewStrategyId::CheckersNotation] =
-			std::make_unique<CheckersNotationView>();
-		m_registeredGameBoardViews[GameBoardViewStrategyId::ChessLikeView] =
-			std::make_unique<ChessLikeView>();
+		return view->GetId() == id;
+	});
+
+	return it != std::cend(m_registeredGameBoardViews);
+}
+
+IGameBoardViewStrategy* GameBoardViewStrategyRegistry::GetGameBoardViewStrategyForId(GameBoardViewStrategyId id) const
+{
+	auto it = std::find_if(std::cbegin(m_registeredGameBoardViews),
+		std::cend(m_registeredGameBoardViews),
+		[id](const std::unique_ptr<IGameBoardViewStrategy>& view)
+	{
+		return view->GetId() == id;
+	});
+
+	if (it != std::cend(m_registeredGameBoardViews))
+	{
+		return it->get();
 	}
-
-	~GameBoardViewStrategyRegistry() = default;
-
-	// Given an id will return the associated game board strategy.
-	IGameBoardViewStrategy* GetGameBoardViewStrategy(GameBoardViewStrategyId id)
-	{
-		auto it = m_registeredGameBoardViews.find(id);
-		if (it != m_registeredGameBoardViews.end())
-		{
-			return it->second.get();
-		}
 
 #ifdef DEBUG
-		// Hi! If you're here, you forgot to add the view to the registry :).
-		assert(true);
+	// Hi! If you're here, you forgot to add the view to the registry :).
+	assert(false);
 #endif
 
-		spdlog::error("Attempted to use unregistered game view strategy. id={}", id);
+	spdlog::error("Attempted to use unregistered game view strategy. id={}", id);
+	return nullptr;
+}
+
+IGameBoardViewStrategy* GameBoardViewStrategyRegistry::GetGameBoardViewStrategyForPlayerOption(int32_t option) const
+{
+	// Options are 1 based because they are player-facing. We subtract one for indexing.
+	option--;
+
+	if (option < 0 || option > static_cast<int32_t>(m_registeredGameBoardViews.size()))
+	{
+		// This can happen if the player selected an option that we deemed to be a valid number, but doesn't
+		// actually map to anything we have registered.
 		return nullptr;
 	}
+	return m_registeredGameBoardViews[option].get();
+}
 
-private:
-	std::unordered_map<GameBoardViewStrategyId,
-		std::unique_ptr<IGameBoardViewStrategy>> m_registeredGameBoardViews;
-};
+//---------------------------------------------------------------
 
 Game::Game()
 	: m_inputComponent(std::make_unique<ConsoleInputComponent>(this))
@@ -73,7 +94,7 @@ Game::Game()
 	m_playerStates.push_back(std::make_unique<PlayerState>(Identity::Red));
 	m_playerStates.push_back(std::make_unique<PlayerState>(Identity::Black));
 
-	m_selectedGameBoardViewStrategy = m_gameBoardViewStrategyRegistry->GetGameBoardViewStrategy(
+	m_selectedGameBoardViewStrategy = m_gameBoardViewStrategyRegistry->GetGameBoardViewStrategyForId(
 		GameplaySettings::s_defaultGameBoardViewStrategy);
 
 	// TODO: Its not obvious that we CANNOT fire off UI events in here. Display
@@ -85,7 +106,7 @@ Game::~Game() = default;
 
 void Game::SetSelectedGameBoardViewStrategy(GameBoardViewStrategyId id)
 {
-	m_selectedGameBoardViewStrategy = m_gameBoardViewStrategyRegistry->GetGameBoardViewStrategy(id);
+	m_selectedGameBoardViewStrategy = m_gameBoardViewStrategyRegistry->GetGameBoardViewStrategyForId(id);
 
 	// Our UI needs to be notified of the change.
 	m_uiPromptRequestedEvents.GetGameBoardViewStrategyChangedEvent().notify(m_selectedGameBoardViewStrategy);

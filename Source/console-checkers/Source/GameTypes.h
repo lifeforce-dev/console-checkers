@@ -38,6 +38,7 @@ enum class Identity : int32_t
 	Red,
 };
 
+// TODO: these strings should use UIText::
 inline std::ostream& operator<<(std::ostream& os, Identity id)
 {
 	switch (id)
@@ -119,7 +120,7 @@ enum class Affinity : int32_t
 enum class GameBoardViewStrategyId
 {
 	// Start of the options.
-	Begin = 0,
+	Invalid = 0,
 
 	// Displays board with chess notation and glyphs, and understand how to interpret input in that format.
 	ChessLikeView,
@@ -131,18 +132,19 @@ enum class GameBoardViewStrategyId
 	End = 3
 };
 
+// TODO: these strings should use UIText::
 inline std::ostream& operator<<(std::ostream& os, GameBoardViewStrategyId id)
 {
 	switch (id)
 	{
+	case GameBoardViewStrategyId::Invalid:
+		os << "Invalid";
+		break;
 	case GameBoardViewStrategyId::ChessLikeView:
 		os << "ChessLikeView";
 		break;
 	case GameBoardViewStrategyId::CheckersNotation:
 		os << "CheckersNotation";
-		break;
-	case GameBoardViewStrategyId::Begin:
-		os << "(Begin) Invalid";
 		break;
 	case GameBoardViewStrategyId::End:
 		os << "(End) Invalid";

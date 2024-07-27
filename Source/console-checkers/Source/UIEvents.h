@@ -7,7 +7,6 @@
 
 #include <observable/observable.hpp>
 
-
 namespace Checkers {
 
 //===============================================================
@@ -24,10 +23,13 @@ public:
 	using WelcomePromptRequestedEvent = observable::subject<void()>;
 	WelcomePromptRequestedEvent& GetWelcomePromptRequestedEvent() { return m_welcomePromptRequestedEvent; }
 
+	// The player has requested the help message.
 	using HelpPromptRequestedEvent = observable::subject<void()>;
 	HelpPromptRequestedEvent& GetHelpPromptRequestedEvent() { return m_helpPromptRequestedEvent; }
 
-	using InputErrorPromptRequested = observable::subject<void(const std::string&)>;
+	// An error occurred with a command and the player should be informed.
+	using CommandErrorPromptRequestedEvent = observable::subject<void(const std::string&)>;
+	CommandErrorPromptRequestedEvent& GetCommandErrorPromptRequestedEvent() { return m_commandErrorPromptRequestedEvent; }
 
 	// The game has requested that we change the visual representation of the checkers board.
 	using GameBoardViewStrategyChangedEvent = observable::subject<void(IGameBoardViewStrategy*)>;
@@ -37,7 +39,7 @@ public:
 private:
 	WelcomePromptRequestedEvent m_welcomePromptRequestedEvent;
 	HelpPromptRequestedEvent m_helpPromptRequestedEvent;
-
+	CommandErrorPromptRequestedEvent m_commandErrorPromptRequestedEvent;
 	GameBoardViewStrategyChangedEvent m_gameBoardViewStrategyChangedEvent;
 };
 

@@ -7,6 +7,7 @@
 
 #include "Game.h"
 #include "IGameBoardViewStrategy.h"
+#include "UITextStrings.h"
 
 #include <spdlog/fmt/bundled/format.h>
 #include <spdlog/spdlog.h>
@@ -21,15 +22,28 @@ ICommand::~ICommand() = default;
 
 HelpCommand::~HelpCommand() = default;
 
-void HelpCommand::Execute(Game* game)
+bool HelpCommand::Execute(Game* game)
 {
+	// TODO: This command is kind of half-baked. Finish filling it out.
+
 	// TODO: Let each command define a description and build the string that way.
 	// Rather than hardcoding it in the json. If we change the name of a command we could
 	// forget to update the strings in the json.
 	game->GetUIPrompRequestedEvents().GetHelpPromptRequestedEvent().notify();
+
+	return true;
+}
+
+const CommandErrorInfo& HelpCommand::GetErrorInfo()
+{
+	// Help command can't error.
+	static CommandErrorInfo info;
+	return info;
 }
 
 //--------------------------------------------------------------
+
+ChangeViewStyleCommand::~ChangeViewStyleCommand() = default;
 
 ChangeViewStyleCommand::ChangeViewStyleCommand(const std::string& styleOption)
 {
@@ -45,38 +59,59 @@ ChangeViewStyleCommand::ChangeViewStyleCommand(const std::string& styleOption)
 		styleOptionEnd,
 		optionValue);
 
-	// This just means there were trailing characters after the command was processed.
+	// This just means there were trailing characters after the command was processed,
+	// which can happen if the player fat fingers stuff.
 	if (inputAfterParse != styleOptionEnd)
 	{
 		spdlog::warn("ChangeViewStyleCommand input may be malformed.inputAfterParse={}",
 			inputAfterParse);
 	}
 
-	if (ec == std::errc())
+	if(ec == std::errc())
 	{
-		const bool isValidViewStrategy = optionValue > static_cast<int32_t>(GameBoardViewStrategyId::Begin) &&
-			optionValue < static_cast<int32_t>(GameBoardViewStrategyId::End);
-
-		// We need to figure out what to do in the case of an invalid strategy.
-		m_newViewStrategy = isValidViewStrategy ?
-			static_cast<GameBoardViewStrategyId>(optionValue) : GameBoardViewStrategyId::End;
+		m_optionValue = optionValue;
 	}
-	else if (ec == std::errc::invalid_argument)
+	else
 	{
-		// TODO: handle this error.
-	}
+		// We cannot complete this request, let's fill out why.
+		m_isCanceled = true;
 
+		if (ec == std::errc::invalid_argument)
+		{
+			m_errorInfo.errorReason = UIText::s_errorCommandReasonInvalidArument;
+		}
+		else
+		{
+			spdlog::warn("Command canceled for unknown reason.");
+			m_errorInfo.errorReason = UIText::s_errorCommandReasonUnknown;
+		}
+	}
 }
 
-ChangeViewStyleCommand::~ChangeViewStyleCommand() = default;
-
-void ChangeViewStyleCommand::Execute(Game* game)
+bool ChangeViewStyleCommand::Execute(Game* game)
 {
-	// TODO: I don't know if we should need this check here. Cancellation should take care of this.
-	if (m_newViewStrategy != GameBoardViewStrategyId::End)
+	// The player selected an option from the list of registered views. So we need to lookup
+	// which view that was.
+	const GameBoardViewStrategyRegistry* viewRegistry = game->GetGameBoardViewStrategyRegistry();
+	const IGameBoardViewStrategy* newViewStrategy = viewRegistry->GetGameBoardViewStrategyForPlayerOption(m_optionValue);
+
+	// The player selected a view that doesn't exist.
+	if (!newViewStrategy)
 	{
-		game->SetSelectedGameBoardViewStrategy(m_newViewStrategy);
+		m_errorInfo.errorReason = UIText::s_errorCommandChangeStyleReasonNotFound;
+		return false;
 	}
+
+	// The player tried to select a view that is already the active one.
+	if (newViewStrategy->GetId() == game->GetSelectedGameBoardViewStrategy()->GetId())
+	{
+		m_errorInfo.errorReason = UIText::s_errorCommandChangeStyleReasonAlreadySelected;
+		return false;
+	}
+
+	// We should have handled all possible errors by this point.
+	game->SetSelectedGameBoardViewStrategy(newViewStrategy->GetId());
+	return true;
 }
 
 void ChangeViewStyleCommand::Cancel()
@@ -84,10 +119,14 @@ void ChangeViewStyleCommand::Cancel()
 	m_isCanceled = true;
 }
 
-bool ChangeViewStyleCommand::IsCanceled()
+bool ChangeViewStyleCommand::IsCanceled() const
 {
-	// NYI
-	return false;
+	return m_isCanceled;
+}
+
+const CommandErrorInfo& ChangeViewStyleCommand::GetErrorInfo()
+{
+	return m_errorInfo;
 }
 
 //--------------------------------------------------------------
@@ -96,9 +135,10 @@ MoveCommand::~MoveCommand() = default;
 
 MoveCommand::MoveCommand(const std::string& sourceInput, const std::string& destinationInput)
 {
+	// NYI
 }
 
-void MoveCommand::Execute(Game* game)
+bool MoveCommand::Execute(Game* game)
 {
 	// NYI
 	int32_t sourceIndex = game->GetSelectedGameBoardViewStrategy()->GameBoardPositionToIndex(m_sourceInput);
@@ -106,11 +146,17 @@ void MoveCommand::Execute(Game* game)
 
 	// TODO: fire event for the move passing the indices that we need to act upon.
 
+	return false;
 }
 
 void MoveCommand::Cancel()
 {
 	m_isCanceled = true;
+}
+
+const CommandErrorInfo& MoveCommand::GetErrorInfo()
+{
+	return m_errorInfo;
 }
 
 //===============================================================

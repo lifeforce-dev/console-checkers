@@ -57,6 +57,8 @@ static std::string_view GetColorForPiece(const Piece& piece)
 	return s_errorColor;
 }
 
+
+CheckersNotationView::CheckersNotationView() = default;
 CheckersNotationView::~CheckersNotationView() = default;
 
 std::string CheckersNotationView::GetGameBoardDisplayText(const std::vector<Piece>& gameBoard) const

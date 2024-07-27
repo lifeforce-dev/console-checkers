@@ -6,6 +6,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 namespace Checkers {
 
@@ -26,9 +27,16 @@ public:
 	ConsoleInputComponent(Game* game);
 	~ConsoleInputComponent();
 
-	void RequestAndProcessInput();
+	// Waits for input, then parses and constructs the appropriate command objects, and executes them.
+	void RequestAndProcessInput() const;
 
 private:
+
+	// Reports a comprehensive error to the UI.
+	void ReportError(unsigned char commandId, const std::string& reason) const;
+
+	// On failure, contextualizes a failure and reports to the UI who notifies the player.
+	std::string GetCommandInfoStringFromId(unsigned char commandId, const std::string& reason) const;
 
 	// Ptr to our parent. It is acceptable for our commands to interact with Game.
 	Game* m_game = nullptr;

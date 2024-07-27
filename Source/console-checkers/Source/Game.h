@@ -15,12 +15,41 @@ namespace Checkers {
 
 //===============================================================
 
-class GameState;
 class ConsoleGameDisplay;
 class ConsoleInputComponent;
-class GameBoardViewStrategyRegistry;
+class GameState;
 class IGameBoardViewStrategy;
 class PlayerState;
+
+class GameBoardViewStrategyRegistry
+{
+public:
+	GameBoardViewStrategyRegistry(const GameBoardViewStrategyRegistry& other) = delete;
+	GameBoardViewStrategyRegistry& operator=(const GameBoardViewStrategyRegistry& other) = delete;
+	GameBoardViewStrategyRegistry(GameBoardViewStrategyRegistry&& other) noexcept = default;
+	GameBoardViewStrategyRegistry& operator=(GameBoardViewStrategyRegistry&& other) noexcept = default;
+
+	GameBoardViewStrategyRegistry();
+	~GameBoardViewStrategyRegistry() = default;
+
+	// Take a view Id and checks if it is registered at all.
+	bool IsRegisteredView(GameBoardViewStrategyId id) const;
+
+	// Returns the list of all registered views.
+	const std::vector<std::unique_ptr<IGameBoardViewStrategy>>& GetRegisteredViews() const;
+
+	// Given an id will return the associated game board strategy.
+	IGameBoardViewStrategy* GetGameBoardViewStrategyForId(GameBoardViewStrategyId id) const;
+
+	// Given a player-facing option (1 based), get the corresponding view.
+	IGameBoardViewStrategy* GetGameBoardViewStrategyForPlayerOption(int32_t option) const;
+
+private:
+
+	// We could use a std::unordered_map here, but the order that they're registered is how
+	// they will appear in the UI, and how the player will select one.
+	std::vector<std::unique_ptr<IGameBoardViewStrategy>> m_registeredGameBoardViews;
+};
 
 class Game
 {
@@ -38,6 +67,7 @@ public:
 	IGameBoardViewStrategy* GetSelectedGameBoardViewStrategy() const { return m_selectedGameBoardViewStrategy; }
 	GameState* GetGameState() const { return m_gameState.get(); }
 	UIEvents& GetUIPrompRequestedEvents() { return m_uiPromptRequestedEvents; }
+	GameBoardViewStrategyRegistry* GetGameBoardViewStrategyRegistry() const { return m_gameBoardViewStrategyRegistry.get(); }
 
 	// Setters
 	void SetSelectedGameBoardViewStrategy(GameBoardViewStrategyId id);

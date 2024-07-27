@@ -15,6 +15,11 @@ namespace Checkers {
 
 class Game;
 
+struct CommandErrorInfo {
+	// Player-facing reason as to why this command failed to process.
+	std::string errorReason;
+};
+
 class ICommand {
 public:
 	ICommand(const ICommand& other) = delete;
@@ -26,13 +31,17 @@ public:
 	virtual ~ICommand();
 
 	// Each command knows how to execute itself.
-	virtual void Execute(Game* game) = 0;
+	virtual bool Execute(Game* game) = 0;
 
 	// Canceled commands should not execute.
 	virtual void Cancel() = 0;
 
 	// Check this before executing. Executing a canceled command can cause bad things to happen.
-	virtual bool IsCanceled() = 0;
+	virtual bool IsCanceled() const = 0;
+
+	// If an error happens inside the command, we need to inform the player.
+	// We don't have access to events and such, so just fill this object out.
+	virtual const CommandErrorInfo& GetErrorInfo() = 0;
 };
 
 // TODO: Maybe move these impls somewhere else.
@@ -50,11 +59,13 @@ public:
 	virtual ~HelpCommand() override;
 
 	// ICommandImpl
-	void Execute(Game* game) override;
+	bool Execute(Game* game) override;
 
 	// HelpCommand shouldn't have any reason to cancel.
 	void Cancel() override {/*NYI*/};
-	bool IsCanceled() override { return false; }
+	bool IsCanceled() const override { return false; }
+
+	const CommandErrorInfo& GetErrorInfo() override;
 };
 
 //---------------------------------------------------------------
@@ -65,6 +76,7 @@ public:
 	struct Settings
 	{
 		static constexpr int32_t s_viewStyleArgPosition = 0;
+		static constexpr int32_t s_requiredArgumentCount = 1;
 	};
 
 	ChangeViewStyleCommand(const ChangeViewStyleCommand& other) = delete;
@@ -76,16 +88,21 @@ public:
 	virtual ~ChangeViewStyleCommand() override;
 
 	// ICommandImpl
-	void Execute(Game* game) override;
+	bool Execute(Game* game) override;
 	void Cancel() override;
-	bool IsCanceled() override;
+	bool IsCanceled() const override;
+	const CommandErrorInfo& GetErrorInfo() override;
 
 private:
-	// Will be set upon execution.
-	GameBoardViewStrategyId m_newViewStrategy = GameBoardViewStrategyId::End;
+
+	// Option the player chose.
+	int32_t m_optionValue = 0;
 
 	// Various errors can cause us to cancel this command.
-	bool m_isCanceled;
+	bool m_isCanceled = false;
+
+	// As much context as we can have around any errors that happen.
+	CommandErrorInfo m_errorInfo;
 };
 
 //---------------------------------------------------------------
@@ -109,9 +126,10 @@ public:
 	virtual ~MoveCommand() override;
 
 	// ICommandImpl
-	void Execute(Game* game) override;
+	bool Execute(Game* game) override;
 	void Cancel() override;
-	bool IsCanceled() override { return m_isCanceled; }
+	bool IsCanceled() const override { return m_isCanceled; }
+	const CommandErrorInfo& GetErrorInfo() override;
 
 private:
 	// Will be translated to the index of the piece the player wants to move.
@@ -122,6 +140,9 @@ private:
 
 	// Various errors can cause us to cancel this command.
 	bool m_isCanceled = false;
+
+	// As much context as we can have around any errors that happen.
+	CommandErrorInfo m_errorInfo;
 };
 
 //===============================================================

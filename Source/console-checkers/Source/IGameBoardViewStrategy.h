@@ -29,6 +29,9 @@ public:
 	IGameBoardViewStrategy& operator=(IGameBoardViewStrategy&& other) noexcept = default;
 	virtual ~IGameBoardViewStrategy() = default;
 
+	// Returns the id associated with this view.
+	virtual GameBoardViewStrategyId GetId() const = 0;
+
 	// Gets the textual representation of the game board data.
 	virtual std::string GetGameBoardDisplayText(const std::vector<Piece>& gameBoard) const = 0;
 

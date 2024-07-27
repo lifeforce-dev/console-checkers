@@ -37,6 +37,13 @@ void ConsoleGameDisplay::Initialize(IGameStateDisplayInfo* displayData, UIEvents
 	events.GetGameBoardViewStrategyChangedEvent().subscribe(
 		[this](IGameBoardViewStrategy* view)
 	{
+		if (!view)
+		{
+			// We'll silently (to the player) fail here.
+			spdlog::error("UI notified of null view style change.");
+			return;
+		}
+
 		IGameBoardViewStrategy* old = m_gameBoardView;
 		m_gameBoardView = view;
 
@@ -52,6 +59,12 @@ void ConsoleGameDisplay::Initialize(IGameStateDisplayInfo* displayData, UIEvents
 	events.GetHelpPromptRequestedEvent().subscribe([this]()
 	{
 		std::cout << fmt::format(UIText::s_helpCommandPromptMessage, m_gameBoardView->GetMoveCommandSyntax());
+	});
+
+	events.GetCommandErrorPromptRequestedEvent().subscribe(
+		[](const std::string promptMessage)
+	{
+		std::cout << promptMessage << "\n";
 	});
 
 	m_isInitialized = true;
