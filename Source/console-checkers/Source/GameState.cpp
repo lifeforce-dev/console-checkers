@@ -387,7 +387,6 @@ void GameState::AddAvailableMovesForPieceIndex(int32_t source)
 		MoveEvalDescription moveEval = moveTestDeque.front();
 		moveTestDeque.pop_front();
 
-		glm::ivec2 sourceCord = moveEval.sourceCoord;
 		if (DoesDescribeMove(moveEval))
 		{
 			glm::ivec2 destCoord = Utility::GetMoveDestCoord(moveEval.sourceCoord, moveEval.direction);
