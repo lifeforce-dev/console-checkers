@@ -25,6 +25,9 @@ private:
 	// Builds and returns the visual representation of the game board according to game state.
 	std::string GetGameBoardDisplay() const;
 
+	// Returns the whole game screen. Use this when redrawing the game state each turn.
+	std::string GetFullGameDisplayText() const;
+
 private:
 	// Our interface into looking at the game data.
 	IGameStateDisplayInfo* m_gameStateInfo = nullptr;

@@ -8,7 +8,7 @@
       "comment": "This is how a board square will be represented. ex. [b][.][B]"
     },
     "HELP_COMMAND_PROMPT_MESSAGE": {
-      "text": "\\nAvailable Commands:\\n\\nHelp:\\n    Description: Displays all available commands and their usage.\\n    Syntax: h | help\\n    Example: help\\n\\nMove:\\n    Description: Moves a piece from one position to another.\\n    Syntax: m | move <source> <destination>\\n    {}\\n\\nChange Style:\\n    Description: Changes the visual style of the game board.\\n    Syntax: s | style <style number>\\n    Example: s 1",
+      "text": "\\nAvailable Commands:\\n\\nHelp:\\n    Description: Displays all available commands and their usage.\\n    Syntax: h | help\\n    Example: help\\n\\nMove:\\n    Description: Moves a piece from one position to another.\\n    Syntax: m | move <source> <destination>\\n    {}\\n\\nChange Style:\\n    Description: Changes the visual style of the game board.\\n    Syntax: s | style <style number>\\n    Example: s 1\\n",
       "comment": "Gives a rundown of the various commands available"
     },
     "MOVE_COMMAND_HELP_EXAMPLE_CHECKERS_NOTATION": {

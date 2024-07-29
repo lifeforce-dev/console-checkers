@@ -12,6 +12,7 @@
 
 #include <functional>
 #include <iostream>
+#include <ranges>
 
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
@@ -77,6 +78,12 @@ public:
 		m_commandRegistry[s_moveCommandId] =
 			[](const std::vector<std::string>& args) -> CommandResult
 		{
+
+			if (args.size() != MoveCommand::Settings::s_requiredArgumentCount)
+			{
+				return { nullptr, UIText::s_errorCommandReasonInvalidArument.data() };
+			}
+
 			return { std::make_unique<MoveCommand>(
 				args[MoveCommand::Settings::s_sourceArgPosition],
 				args[MoveCommand::Settings::s_destinationArgPosition]) };
@@ -123,11 +130,15 @@ void ConsoleInputComponent::RequestAndProcessInput() const
 		return;
 	}
 
+	std::string sanitizedInput;
+	auto toLower = [](const unsigned char c) { return std::tolower(c); };
+	std::ranges::copy(std::views::transform(input, toLower), std::back_inserter(sanitizedInput));
+
 	// The first character in the input is our identifier for which command to execute.
-	const unsigned char commandId = input[0];
+	const unsigned char commandId = sanitizedInput[0];
 
 	// Skip over the commandId we just looked at.
-	std::istringstream iss(input.substr(1));
+	std::istringstream iss(sanitizedInput.substr(1));
 	std::vector<std::string> args;
 
 	std::string arg;
@@ -139,19 +150,19 @@ void ConsoleInputComponent::RequestAndProcessInput() const
 	const auto commandResult = m_commandFactory->CreateCommand(commandId, args);
 	if (!commandResult.command)
 	{
-		spdlog::info("Failed to create command, it will not be executed. commandId={} input={}", commandId, input);
+		spdlog::info("Failed to create command, it will not be executed. commandId={} input={}", commandId, sanitizedInput);
 		ReportError(commandId, commandResult.errorReason);
 	}
 	else if (commandResult.command->IsCanceled())
 	{
-		spdlog::info("Skipped execution of canceled command. commandId={} input={}", commandId, input);
+		spdlog::info("Skipped execution of canceled command. commandId={} input={}", commandId, sanitizedInput);
 		ReportError(commandId, commandResult.command->GetErrorInfo().errorReason);
 	}
 	else
 	{
 		if (!commandResult.command->Execute(m_game))
 		{
-			spdlog::info("Failed to execute command. commandId={} input={}", commandId, input);
+			spdlog::info("Failed to execute command. commandId={} input={}", commandId, sanitizedInput);
 			ReportError(commandId, commandResult.command->GetErrorInfo().errorReason);
 		}
 	}
@@ -159,7 +170,7 @@ void ConsoleInputComponent::RequestAndProcessInput() const
 
 void ConsoleInputComponent::ReportError(unsigned char commandId, const std::string& reason) const
 {
-	m_game->GetUIPrompRequestedEvents().GetCommandErrorPromptRequestedEvent().notify(
+	m_game->GetUIEvents().GetCommandErrorPromptRequestedEvent().notify(
 		GetCommandInfoStringFromId(commandId, reason));
 }
 

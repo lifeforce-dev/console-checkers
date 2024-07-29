@@ -25,7 +25,16 @@ public:
 
 
 	// Returns the game data that will be rendered for the player.
-	const virtual std::vector<Piece>& GetGameBoardData() = 0;
+	const virtual std::vector<Piece>& GetGameBoardData() const = 0;
+
+	// Returns the list of pieces captured by black player.
+	const virtual std::vector<Piece>& GetBlackPlayerCapturedPieces() const = 0;
+
+	// Returns the list of pieces captured by red player.
+	const virtual std::vector<Piece>& GetRedPlayerCapturedPieces() const = 0;
+
+	// Returns the identity of the player whose turn it currently is.
+	const virtual Identity GetTurnPlayerId() const = 0;
 };
 
 //===============================================================

@@ -9,8 +9,10 @@
 #include "IGameBoardViewStrategy.h"
 #include "UITextStrings.h"
 
-#include <spdlog/fmt/bundled/format.h>
 #include <spdlog/spdlog.h>
+// Magic include needed for spdlog to log a custom type.
+// Must be included after spdlog.h. Thanks spdlog.
+#include <spdlog/fmt/ostr.h>
 
 namespace Checkers {
 
@@ -29,7 +31,7 @@ bool HelpCommand::Execute(Game* game)
 	// TODO: Let each command define a description and build the string that way.
 	// Rather than hardcoding it in the json. If we change the name of a command we could
 	// forget to update the strings in the json.
-	game->GetUIPrompRequestedEvents().GetHelpPromptRequestedEvent().notify();
+	game->GetUIEvents().GetHelpPromptRequestedEvent().notify();
 
 	return true;
 }
@@ -134,19 +136,34 @@ const CommandErrorInfo& ChangeViewStyleCommand::GetErrorInfo()
 MoveCommand::~MoveCommand() = default;
 
 MoveCommand::MoveCommand(const std::string& sourceInput, const std::string& destinationInput)
+	: m_sourceInput(sourceInput)
+	, m_destinationInput(destinationInput)
 {
-	// NYI
+	// We let the view validate whether an argument is well-formed because its format is
+	// tightly coupled to its display to the player. Attempting to do that here would impose
+	// restrictions on what kinds of arguments a view can accept, and therefore how it can
+	// display to the player.
 }
 
 bool MoveCommand::Execute(Game* game)
 {
 	// NYI
-	int32_t sourceIndex = game->GetSelectedGameBoardViewStrategy()->GameBoardPositionToIndex(m_sourceInput);
-	int32_t destinationIndex = game->GetSelectedGameBoardViewStrategy()->GameBoardPositionToIndex(m_destinationInput);
+	int32_t sourceIndex = game->GetSelectedGameBoardViewStrategy()->GetGameBoardIndexFromInput(m_sourceInput);
+	int32_t destinationIndex = game->GetSelectedGameBoardViewStrategy()->GetGameBoardIndexFromInput(m_destinationInput);
 
-	// TODO: fire event for the move passing the indices that we need to act upon.
+	if (sourceIndex == GameBoardStatics::s_invalidBoardIndex ||
+		destinationIndex == GameBoardStatics::s_invalidBoardIndex)
+	{
+		m_errorInfo.errorReason = "NYI-SET_REASON";
+		return false;
+	}
 
-	return false;
+	PieceMoveDescription pieceMoveDescription{ sourceIndex, destinationIndex };
+	spdlog::info("Player wants to make a move. MoveDescription={}", pieceMoveDescription);
+
+	game->MovePiece(pieceMoveDescription);
+
+	return true;
 }
 
 void MoveCommand::Cancel()

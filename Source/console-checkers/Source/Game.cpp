@@ -11,7 +11,6 @@
 #include "GameSettings.h"
 #include "GameState.h"
 #include "GameTypes.h"
-#include "PlayerState.h"
 
 #include <spdlog/spdlog.h>
 
@@ -87,13 +86,9 @@ IGameBoardViewStrategy* GameBoardViewStrategyRegistry::GetGameBoardViewStrategyF
 
 Game::Game()
 	: m_inputComponent(std::make_unique<ConsoleInputComponent>(this))
-	, m_gameState(std::make_unique<GameState>())
+	, m_gameState(std::make_unique<GameState>(this))
 	, m_gameBoardViewStrategyRegistry(std::make_unique<GameBoardViewStrategyRegistry>())
 {
-	// Creates both players.
-	m_playerStates.push_back(std::make_unique<PlayerState>(Identity::Red));
-	m_playerStates.push_back(std::make_unique<PlayerState>(Identity::Black));
-
 	m_selectedGameBoardViewStrategy = m_gameBoardViewStrategyRegistry->GetGameBoardViewStrategyForId(
 		GameplaySettings::s_defaultGameBoardViewStrategy);
 
@@ -106,10 +101,20 @@ Game::~Game() = default;
 
 void Game::SetSelectedGameBoardViewStrategy(GameBoardViewStrategyId id)
 {
+	if (m_selectedGameBoardViewStrategy->GetId() == id)
+	{
+		return;
+	}
+
 	m_selectedGameBoardViewStrategy = m_gameBoardViewStrategyRegistry->GetGameBoardViewStrategyForId(id);
 
 	// Our UI needs to be notified of the change.
 	m_uiPromptRequestedEvents.GetGameBoardViewStrategyChangedEvent().notify(m_selectedGameBoardViewStrategy);
+}
+
+void Game::MovePiece(const PieceMoveDescription& moveDescription) const
+{
+	m_gameState->MovePiece(moveDescription);
 }
 
 void Game::Run()

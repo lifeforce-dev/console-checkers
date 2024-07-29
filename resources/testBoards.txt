@@ -1,0 +1,115 @@
+	// Hint Test Setup
+	static constexpr std::array<Piece, 64> s_defaultGameBoard =
+	{
+		// Row 0
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+		// Row 1
+		Piece{ PieceType::King, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+		// Row 2
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Pawn, Identity::Black}, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+		// Row 3
+		Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+		// Row 4
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Pawn, Identity::Black}, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black },
+		Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
+
+		// Row 5
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
+
+		// Row 6
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+		// Row 7
+		Piece{ PieceType::King, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Red },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Pawn, Identity::Red}, Piece{ PieceType::Empty, Identity::Neutral }
+	};
+
+	// General Debugging Board Setup
+	static constexpr std::array<Piece, 64> s_defaultGameBoard =
+	{
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Red },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::King, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral },
+
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::King, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::King, Identity::Black },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
+
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black },
+
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		Piece{ PieceType::King, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral }
+	};
+
+// All empty test board.
+static constexpr std::array<Piece, 64> s_defaultGameBoard =
+{
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }
+};

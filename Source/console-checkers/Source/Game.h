@@ -19,7 +19,6 @@ class ConsoleGameDisplay;
 class ConsoleInputComponent;
 class GameState;
 class IGameBoardViewStrategy;
-class PlayerState;
 
 class GameBoardViewStrategyRegistry
 {
@@ -66,11 +65,14 @@ public:
 	// Getters
 	IGameBoardViewStrategy* GetSelectedGameBoardViewStrategy() const { return m_selectedGameBoardViewStrategy; }
 	GameState* GetGameState() const { return m_gameState.get(); }
-	UIEvents& GetUIPrompRequestedEvents() { return m_uiPromptRequestedEvents; }
+	UIEvents& GetUIEvents() { return m_uiPromptRequestedEvents; }
 	GameBoardViewStrategyRegistry* GetGameBoardViewStrategyRegistry() const { return m_gameBoardViewStrategyRegistry.get(); }
 
-	// Setters
+	// Given an id will set the view strategy.
 	void SetSelectedGameBoardViewStrategy(GameBoardViewStrategyId id);
+
+	// Given a move description will forward to GameState to attempt move.
+	void MovePiece(const PieceMoveDescription& moveDescription) const;
 
 	// Runs the game until a win condition is met.
 	void Run();
@@ -82,9 +84,6 @@ private:
 
 	// Holds the entire state of the game, including the board, player turn, etc.
 	std::unique_ptr<GameState> m_gameState = nullptr;
-
-	// Each player has a state object with info specific to that player. This list holds each player.
-	std::vector<std::unique_ptr<PlayerState>> m_playerStates;
 
 	// Registry of our available view strategies.
 	std::unique_ptr<GameBoardViewStrategyRegistry> m_gameBoardViewStrategyRegistry = nullptr;

@@ -24,7 +24,7 @@ int main()
 	Checkers::ConsoleGameDisplay display;
 
 	// Init the display.
-	display.Initialize(game.GetGameState(), game.GetUIPrompRequestedEvents());
+	display.Initialize(game.GetGameState(), game.GetUIEvents());
 
 	// Run until we're done.
 	game.Run();

@@ -8,9 +8,10 @@
 #include "GameSettings.h"
 #include "UITextStrings.h"
 
-#include "spdlog/spdlog.h"
-#include "spdlog/fmt/bundled/format.h"
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/bundled/format.h>
 
+#include <array>
 #include <sstream>
 
 namespace Checkers {
@@ -57,6 +58,41 @@ static std::string_view GetColorForPiece(const Piece& piece)
 	return s_errorColor;
 }
 
+struct CheckersNotationInputSettings {
+
+	struct IndexMapping
+	{
+		// This is the value a player will input.
+		int32_t notationValue = 0;
+
+		// This is the index into the game board that the notation maps to.
+		int32_t index = 0;
+	};
+
+	// An input position token has 2 values. ex. 01 or 23 or 11, etc
+	static constexpr int32_t s_requiredTokenCount = 2;
+
+	// Maps from an input index represented in checkers notation, to a game board index.
+	static constexpr std::array<IndexMapping, 32> s_checkersNotationToIndexMappings =
+	{
+		// Row 1
+		IndexMapping{ 1, 1 },IndexMapping{ 2, 3 },IndexMapping{ 3, 5 }, IndexMapping{ 4, 7 },
+		// Row 2
+		IndexMapping{ 5, 8 },IndexMapping{ 6, 10 },IndexMapping{ 7, 12 }, IndexMapping{ 8, 14 },
+		// Row 3
+		IndexMapping{ 9, 17 },IndexMapping{ 10, 19 },IndexMapping{ 11, 21 }, IndexMapping{ 12, 23 },
+		// Row 4
+		IndexMapping{ 13, 24 },IndexMapping{ 14, 26 },IndexMapping{ 15, 28 }, IndexMapping{ 16, 30 },
+		// Row 5
+		IndexMapping{ 17, 33 },IndexMapping{ 18, 35 },IndexMapping{ 19, 37 }, IndexMapping{ 20, 39 },
+		// Row 6
+		IndexMapping{ 21, 40 },IndexMapping{ 22, 42 },IndexMapping{ 23, 44 }, IndexMapping{ 24, 46},
+		// Row 7
+		IndexMapping{ 25, 49 },IndexMapping{ 26, 51 },IndexMapping{ 27, 53 }, IndexMapping{ 28, 55 },
+		// Row 8
+		IndexMapping{ 29, 56 },IndexMapping{ 30, 58 },IndexMapping{ 31, 60 }, IndexMapping{ 32, 62 },
+	};
+};
 
 CheckersNotationView::CheckersNotationView() = default;
 CheckersNotationView::~CheckersNotationView() = default;
@@ -105,10 +141,31 @@ std::string CheckersNotationView::GetGameBoardDisplayText(const std::vector<Piec
 	return ss.str();
 }
 
-int32_t CheckersNotationView::GameBoardPositionToIndex(const std::string& position) const
+int32_t CheckersNotationView::GetGameBoardIndexFromInput(const std::string& inputPosition) const
 {
-	// NYI
-	return 0;
+	// Argument was malformed, we can't do anything with this.
+	if (inputPosition.size() != CheckersNotationInputSettings::s_requiredTokenCount)
+	{
+		return GameBoardStatics::s_invalidBoardIndex;
+	}
+
+	int32_t inputIndex= 0;
+	auto [inputAfterParse, ec] = std::from_chars(inputPosition.data(),
+		inputPosition.data() + inputPosition.size(), inputIndex);
+	if (ec != std::errc{})
+	{
+		return GameBoardStatics::s_invalidBoardIndex;
+	}
+
+	auto it = std::ranges::find_if(
+		CheckersNotationInputSettings::s_checkersNotationToIndexMappings,
+	[inputIndex](const CheckersNotationInputSettings::IndexMapping& mapping)
+	{
+		return inputIndex == mapping.notationValue;
+	});
+
+	bool found = it != CheckersNotationInputSettings::s_checkersNotationToIndexMappings.end();
+	return found ? it->index : GameBoardStatics::s_invalidBoardIndex;
 }
 
 std::string_view CheckersNotationView::GetMoveCommandSyntax() const

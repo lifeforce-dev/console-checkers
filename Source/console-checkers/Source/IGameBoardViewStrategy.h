@@ -36,7 +36,7 @@ public:
 	virtual std::string GetGameBoardDisplayText(const std::vector<Piece>& gameBoard) const = 0;
 
 	// Takes a formatted player-facing board position string and returns a game board index.
-	virtual int32_t GameBoardPositionToIndex(const std::string& position) const = 0;
+	virtual int32_t GetGameBoardIndexFromInput(const std::string& position) const = 0;
 
 	// Gets the move command syntax for this particular view.
 	virtual std::string_view GetMoveCommandSyntax() const = 0;

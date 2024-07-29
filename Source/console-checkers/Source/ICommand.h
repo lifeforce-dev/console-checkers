@@ -115,6 +115,7 @@ public:
 	{
 		static constexpr int32_t s_sourceArgPosition = 0;
 		static constexpr int32_t s_destinationArgPosition = 1;
+		static constexpr int32_t s_requiredArgumentCount = 2;
 	};
 
 	MoveCommand(const MoveCommand& other) = delete;
