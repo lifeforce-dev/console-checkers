@@ -100,8 +100,18 @@ struct BoardDirectionStatics
 template <class T>
 inline void hash_combine(std::size_t& s, const T& v)
 {
+	// Adding a value like this helps mix the bits
+	constexpr std::size_t s_magicConstant = 0x9e3779b9;
+
+	// The goal is to produce the same hash for a given combination of objects, but that the hash is unique enough to
+	// not need to worry about collisions.
+
+	// ^ is XOR, and ^= is used to combine the hash of v to the total hash.
+	// shifting bits around left and right ensures that small changes to the input sequence
+	// result in significantly different hash values.
+
 	std::hash<T> h;
-	s ^= h(v) + 0x9e3779b9 + (s << 6) + (s >> 2);
+	s ^= h(v) + s_magicConstant + (s << 6) + (s >> 2);
 }
 
 struct PieceMoveDescription
@@ -127,13 +137,9 @@ struct PieceMoveDescriptionHash
 {
 	std::size_t operator()(const PieceMoveDescription& move) const
 	{
-		const std::size_t sourceHash = std::hash<int32_t>()(move.sourceIndex);
-		const std::size_t destHash = std::hash<int32_t>()(move.destIndex);
-
 		std::size_t hash = 0;
 		hash_combine(hash, move.sourceIndex);
 		hash_combine(hash, move.destIndex);
-		// Combine the hashes with bitwise operations and use another prime number for better distribution.
 		return hash;
 	}
 };
@@ -185,8 +191,6 @@ struct PieceHash
 		std::size_t hash = 0;
 		hash_combine(hash, piece.pieceType);
 		hash_combine(hash, piece.identity);
-		// ^ is an XOR and Combines the two together ensuring that changes in one significantly changes the output of the final hash
-		// the multiplication by 3 uses a small prime number to modify one of the hashes before combining, which helps distribution.
 		return hash;
 	}
 };
