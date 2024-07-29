@@ -15,8 +15,22 @@ void SetupLogger() {
 	spdlog::set_level(spdlog::level::debug);
 }
 
+void EnableANSI() {
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (hOut == INVALID_HANDLE_VALUE)
+		return;
+	// https://learn.microsoft.com/en-us/windows/console/setconsolemode
+	DWORD dwMode = 0;
+	if (!GetConsoleMode(hOut, &dwMode))
+		return;
+
+	dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+	SetConsoleMode(hOut, dwMode);
+}
+
 int main()
 {
+	EnableANSI();
 	SetupLogger();
 
 	// TODO: Perhaps this stuff goes into an Application class or something. For now who cares.
