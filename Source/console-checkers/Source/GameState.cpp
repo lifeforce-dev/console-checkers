@@ -121,7 +121,7 @@ void GameState::MovePiece(const PieceMoveDescription& moveDescription)
 	spdlog::info("hash:{}", gameBoardHash);
 	int& occurrenceCount = m_gameStateOccurrences[{m_turnPlayerIdentity, gameBoardHash}];
 	occurrenceCount++;
-	if (occurrenceCount == 3)
+	if (occurrenceCount == GameplaySettings::s_gameStateRuleCount)
 	{
 		m_winConditionState = WinConditionReason::GameStateViolationDraw;
 		m_game->GetUIEvents().GetWinConditionMetEvent().notify(m_winConditionState);
@@ -198,8 +198,8 @@ bool GameState::ShouldKingPiece(int32_t locationIndex, Identity pieceIdentity) c
 {
 	glm::ivec2 currentLocationCoord = Utility::ToGameBoardCoordFromIndex(locationIndex);
 
-	const bool shouldKingRedPiece = pieceIdentity == Identity::Red && currentLocationCoord.x == GameplaySettings::redKingRankIndex;
-	const bool shouldKingBlackPiece = pieceIdentity == Identity::Black && currentLocationCoord.x == GameplaySettings::blackKingRankIndex;
+	const bool shouldKingRedPiece = pieceIdentity == Identity::Red && currentLocationCoord.x == GameplaySettings::s_redKingRankIndex;
+	const bool shouldKingBlackPiece = pieceIdentity == Identity::Black && currentLocationCoord.x == GameplaySettings::s_blackKingRankIndex;
 	return shouldKingRedPiece || shouldKingBlackPiece;
 }
 

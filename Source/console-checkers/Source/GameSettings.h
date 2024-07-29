@@ -80,10 +80,13 @@ struct GameplaySettings {
 	static constexpr int32_t s_boardSize = 8;
 
 	// A red pawn that reaches this rank index will be promoted to king.
-	static constexpr int32_t redKingRankIndex = 0;
+	static constexpr int32_t s_redKingRankIndex = 0;
 
 	// A black pawn that reaches this rank index will be promoted to king.
-	static constexpr int32_t blackKingRankIndex = GameplaySettings::s_boardSize - 1;
+	static constexpr int32_t s_blackKingRankIndex = GameplaySettings::s_boardSize - 1;
+
+	// Official Checkers rules states that an exact game state cannot reappear 3 times, or the game ends in a draw.
+	static constexpr int32_t s_gameStateRuleCount = 3;
 
 	// Default game board view strat.
 	static constexpr GameBoardViewStrategyId s_defaultGameBoardViewStrategy = GameBoardViewStrategyId::CheckersNotation;
