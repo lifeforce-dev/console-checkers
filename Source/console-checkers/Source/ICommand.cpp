@@ -154,7 +154,7 @@ bool MoveCommand::Execute(Game* game)
 	if (sourceIndex == GameBoardStatics::s_invalidBoardIndex ||
 		destinationIndex == GameBoardStatics::s_invalidBoardIndex)
 	{
-		m_errorInfo.errorReason = "NYI-SET_REASON";
+		m_errorInfo.errorReason = UIText::s_errorCommandMoveReasonInvalidMoveDescription;
 		return false;
 	}
 

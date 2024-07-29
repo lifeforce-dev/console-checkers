@@ -314,7 +314,6 @@ void GameState::HandleTurnStart()
 		m_winConditionState = WinConditionReason::NoAvailableMovesLoss;
 		m_game->GetUIEvents().GetWinConditionMetEvent().notify(m_winConditionState);
 	}
-
 }
 
 void GameState::PopulateAvailableMoves()

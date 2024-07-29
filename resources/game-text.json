@@ -46,5 +46,13 @@
     "ERROR_COMMAND_UNKNOWN": {
       "text": "Not a valid command.",
       "comment": "The player tried to invoke a command that doesn't exist."
+    },
+    "ERROR_COMMAND_MOVE_REASON_INVALID_MOVE_DESCRIPTION": {
+      "text": "Move command not understood.",
+      "comment": "The player entered a move command that resulted in coords going off of the board."
+    },
+    "ERROR_COMMAND_MOVE": {
+      "text": "Invalid Move command. Reason={}. \\nExpected Syntax | m <source> <destination> | {}",
+      "comment": "The player entered a move command that we didn't understand."
     }
   }

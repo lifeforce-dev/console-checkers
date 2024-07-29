@@ -199,11 +199,18 @@ std::string ConsoleInputComponent::GetCommandInfoStringFromId(unsigned char comm
 	// Other commands NYI
 	if (commandId == s_helpCommandId)
 	{
+#ifdef DEBUG
+		// Help command is not allowed to fail.
+		assert(false);
+#endif
 		return "HELP_FAILURE_INFO_NYI";
 	}
 	if (commandId == s_moveCommandId)
 	{
-		return "MOVE_FAIL_INFO_NYI";
+		
+		return fmt::format(UIText::s_errorCommandMove.data(),
+			reason,
+			m_game->GetSelectedGameBoardViewStrategy()->GetMoveCommandSyntax());
 	}
 
 	return UIText::s_errorCommandUnknown.data();
