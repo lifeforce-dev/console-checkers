@@ -10,8 +10,6 @@
 #include "UITextStrings.h"
 #include "Utility.h"
 
-#include <spdlog/fmt/bundled/core.h>
-#include <spdlog/fmt/ranges.h>
 #include <spdlog/spdlog.h>
 
 #include <cassert>
