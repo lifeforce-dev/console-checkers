@@ -33,7 +33,7 @@ int main()
 	EnableANSI();
 	SetupLogger();
 
-	// TODO: Perhaps this stuff goes into an Application class or something. For now who cares.
+	// TODO: Perhaps this stuff goes into an Application class or something.
 	Checkers::Game game;
 	Checkers::ConsoleGameDisplay display;
 
