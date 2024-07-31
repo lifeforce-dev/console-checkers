@@ -33,7 +33,8 @@ public:
 	virtual GameBoardViewStrategyId GetId() const = 0;
 
 	// Gets the textual representation of the game board data.
-	virtual std::string GetGameBoardDisplayText(const std::vector<Piece>& gameBoard) const = 0;
+	virtual std::string GetGameBoardDisplayText(const std::vector<Piece>& gameBoard,
+		const std::vector<int32_t>& hintIndices) const = 0;
 
 	// Takes a formatted player-facing board position string and returns a game board index.
 	virtual int32_t GetGameBoardIndexFromInput(const std::string& position) const = 0;

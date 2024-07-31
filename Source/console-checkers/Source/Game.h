@@ -77,6 +77,9 @@ public:
 	// Runs the game until a win condition is met.
 	void Run();
 
+	// Activates hints on the game state and notifies the display.
+	void DisplayPlayerHints();
+
 private:
 
 	// InputComponent handles input and delegates commands to where they need to go.

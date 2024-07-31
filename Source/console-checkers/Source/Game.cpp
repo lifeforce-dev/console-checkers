@@ -132,6 +132,11 @@ void Game::Run()
 	}
 }
 
+void Game::DisplayPlayerHints()
+{
+	m_gameState->ScopedActivateHintsAndNotify();
+}
+
 //===============================================================
 
 }

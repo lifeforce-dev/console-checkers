@@ -47,6 +47,21 @@ const CommandErrorInfo& HelpCommand::GetErrorInfo()
 
 ChangeViewStyleCommand::~ChangeViewStyleCommand() = default;
 
+bool HintCommand::Execute(Game* game)
+{
+	game->DisplayPlayerHints();
+	return true;
+}
+
+HintCommand::~HintCommand() = default;
+
+const CommandErrorInfo& HintCommand::GetErrorInfo()
+{
+	// Hint command can't error.
+	static CommandErrorInfo info;
+	return info;
+}
+
 ChangeViewStyleCommand::ChangeViewStyleCommand(const std::string& styleOption)
 {
 	int32_t optionValue = 0;

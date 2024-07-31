@@ -22,7 +22,8 @@ public:
 	virtual ~CheckersNotationView() override;
 
 	// Returns the textual representation of the board with checkers notation using colored numbers instead of glyphs.
-	std::string GetGameBoardDisplayText(const std::vector<Piece>& gameBoard) const override;
+	std::string GetGameBoardDisplayText(const std::vector<Piece>& gameBoard,
+		const std::vector<int32_t>& hintIndices) const override;
 
 	// Given a string with a checkers coordinate the player understands, returns an index the game can understand.
 	int32_t GetGameBoardIndexFromInput(const std::string& position) const override;

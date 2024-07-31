@@ -25,7 +25,8 @@ public:
 	// IGameViewViewStrategy impl
 
 	// Shows pieces as glyphs. ex. blackPawn= b, blackKing= B, etc.
-	std::string GetGameBoardDisplayText(const std::vector<Piece>& gameBoard) const override;
+	std::string GetGameBoardDisplayText(const std::vector<Piece>& gameBoard,
+		const std::vector<int32_t>& hintIndices) const override;
 
 	// Translates from chess coordinates that the player sees, to an index our game can use.
 	int32_t GetGameBoardIndexFromInput(const std::string& position) const override;

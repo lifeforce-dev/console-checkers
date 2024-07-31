@@ -17,55 +17,50 @@ namespace Checkers {
 struct GameplaySettings {
 
 	// These are the only directions that a red pawn may move.
-	static constexpr std::array<glm::ivec2, 2> s_redPawnDirections = { BoardDirectionStatics::s_upLeft, BoardDirectionStatics::s_upRight };
+	static constexpr std::array<glm::ivec2, 2> s_redPawnDirections = { GameBoardStatics::s_upLeft, GameBoardStatics::s_upRight };
 
 	// All kings have the same available directions.
-	static constexpr std::array<glm::ivec2, 4> s_kingDirections = { BoardDirectionStatics::s_upLeft, BoardDirectionStatics::s_upRight,
-		BoardDirectionStatics::s_downLeft, BoardDirectionStatics::s_downRight };
+	static constexpr std::array<glm::ivec2, 4> s_kingDirections = { GameBoardStatics::s_upLeft, GameBoardStatics::s_upRight,
+		GameBoardStatics::s_downLeft, GameBoardStatics::s_downRight };
 
 	// These are the only directions a black pawn may move.
-	static constexpr std::array<glm::ivec2, 2> s_blackPawnDirections = { BoardDirectionStatics::s_downLeft, BoardDirectionStatics::s_downRight };
+	static constexpr std::array<glm::ivec2, 2> s_blackPawnDirections = { GameBoardStatics::s_downLeft, GameBoardStatics::s_downRight };
 
-	// The default board configuration. If you need to do some testing, you can make changes here and they will be reflected on startup.
-		// The default board configuration. If you need to do some testing, you can make changes here and they will be reflected on startup.
+	// Default Board Setup
 	static constexpr std::array<Piece, 64> s_defaultGameBoard =
 	{
-		// Top three rows for 'Black' pieces (farthest from player perspective).
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Pawn, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{PieceType::Pawn, Identity::Black},
+		// row 0
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
 
-		Piece{ PieceType::Pawn, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Pawn, Identity::Black }, Piece{PieceType::Empty, Identity::Neutral },
+		// row 1
+		GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece,
+		GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece,
 
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{PieceType::Pawn, Identity::Black }, Piece{PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Pawn, Identity::Black }, Piece{PieceType::Empty, Identity::Neutral }, Piece{PieceType::Pawn, Identity::Black },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{PieceType::Pawn, Identity::Black },
+		// row 2
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
 
-		// Middle two rows are empty.
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral}, Piece{PieceType::Empty, Identity::Neutral},
+		// row 3
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{PieceType::Empty, Identity::Neutral },
+		// row 4
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
-		// Bottom three rows for 'Red' pieces (closest to player perspective).
-		Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Red },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
+		// row 5
+		GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece,
+		GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece,
 
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Red },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Red },
+		// row 6
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn,
 
-		Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Red },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral }
+		// row 7
+		GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece,
+		GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece
 	};
-
 
 	// The magnitude to apply to a direction in order to move a piece. (1 space).
 	static constexpr int32_t s_moveDistance = 1;

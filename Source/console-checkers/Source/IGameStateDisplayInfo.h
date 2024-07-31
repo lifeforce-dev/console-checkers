@@ -35,6 +35,9 @@ public:
 
 	// Returns the identity of the player whose turn it currently is.
 	const virtual Identity GetTurnPlayerId() const = 0;
+
+	// Returns the indices that indicate the best place a player can move.
+	virtual std::vector<int32_t> GetBestHintIndices() const = 0;
 };
 
 //===============================================================

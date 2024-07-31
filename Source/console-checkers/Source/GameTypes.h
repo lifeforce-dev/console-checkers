@@ -81,21 +81,6 @@ inline std::ostream& operator<<(std::ostream& os, Identity id)
 	return os;
 }
 
-struct BoardDirectionStatics
-{
-	// 2d array index directions go by row col.
-	static constexpr glm::ivec2 s_up = glm::ivec2(-1, 0);
-	static constexpr glm::ivec2 s_down = glm::ivec2(1, 0);
-	static constexpr glm::ivec2 s_left = glm::ivec2(0, -1);
-	static constexpr glm::ivec2 s_right = glm::ivec2(0, 1);
-
-	// Define diagonal directions using primary directions
-	static constexpr glm::ivec2 s_upRight = s_up + s_right;
-	static constexpr glm::ivec2 s_upLeft = s_up + s_left;
-	static constexpr glm::ivec2 s_downRight = s_down + s_right;
-	static constexpr glm::ivec2 s_downLeft = s_down + s_left;
-};
-
 // Inspired by boost, simple hash combine for hashing custom structs.
 template <class T>
 inline void hash_combine(std::size_t& s, const T& v)
@@ -146,8 +131,12 @@ struct PieceMoveDescriptionHash
 
 struct PieceMoveHint
 {
-	// The size of this chain will serve as the score of this move hint.
-	// The list of moves resulting in maximal captures that can be chained to the base move.
+	// Used to sort this hint.
+	// A capture chain with 1 entry indicates a basic move with no captures, and so the score will be 0.
+	// 2 entries indicates 1 capture and its score will be 1, etc.
+	size_t score = 0;
+
+	// For a base move (first entry), the series of moves resulting in the highest number of captures.
 	std::vector<PieceMoveDescription> captureChain;
 };
 
@@ -170,6 +159,9 @@ struct Piece
 
 	// Determines when this piece can move.
 	Identity identity;
+
+	// Uniquely identifies this specific piece.
+	int32_t uid = 0;
 
 	// The combined Piece Type and Identity make up the logical identity of a piece.
 	// Therefore, those are the only values that we include in the hash and equality operator.
@@ -266,7 +258,7 @@ inline std::ostream& operator<<(std::ostream& os, GameBoardViewStrategyId id)
 }
 
 struct GameBoardStatics
-	{
+{
 	// Often used for failure to get a valid index.
 	static constexpr int32_t s_invalidBoardIndex = -1;
 
@@ -276,6 +268,18 @@ struct GameBoardStatics
 	static constexpr Piece s_blackPawn{ PieceType::Pawn, Identity::Black };
 	static constexpr Piece s_blackKing{ PieceType::King, Identity::Black };
 	static constexpr Piece s_emptyPiece{ PieceType::Empty, Identity::Neutral };
+
+	// 2d array index directions go by row col.
+	static constexpr glm::ivec2 s_up = glm::ivec2(-1, 0);
+	static constexpr glm::ivec2 s_down = glm::ivec2(1, 0);
+	static constexpr glm::ivec2 s_left = glm::ivec2(0, -1);
+	static constexpr glm::ivec2 s_right = glm::ivec2(0, 1);
+
+	// Define diagonal directions using primary directions
+	static constexpr glm::ivec2 s_upRight = s_up + s_right;
+	static constexpr glm::ivec2 s_upLeft = s_up + s_left;
+	static constexpr glm::ivec2 s_downRight = s_down + s_right;
+	static constexpr glm::ivec2 s_downLeft = s_down + s_left;
 };
 
 struct GameStateRecord

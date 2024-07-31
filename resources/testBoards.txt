@@ -1,115 +1,109 @@
-	// Hint Test Setup
-	static constexpr std::array<Piece, 64> s_defaultGameBoard =
-	{
-		// Row 0
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+		// The default board configuration. If you need to do some testing, you can make changes here and they will be reflected on startup.
+static constexpr std::array<Piece, 64> s_defaultGameBoard =
+{
+	// row 0
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
 
-		// Row 1
-		Piece{ PieceType::King, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+	// row 1
+	GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece,
 
-		// Row 2
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Pawn, Identity::Black}, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+	// row 2
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
 
-		// Row 3
-		Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+	// row 3
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
-		// Row 4
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Pawn, Identity::Black}, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black },
-		Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
+	// row 4
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
-		// Row 5
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
+	// row 5
+	GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece,
 
-		// Row 6
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+	// row 6
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn,
 
-		// Row 7
-		Piece{ PieceType::King, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Red },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Pawn, Identity::Red}, Piece{ PieceType::Empty, Identity::Neutral }
-	};
+	// row 7
+	GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece
+};
 
-	// General Debugging Board Setup
-	static constexpr std::array<Piece, 64> s_defaultGameBoard =
-	{
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Red },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::King, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral },
-
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::King, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::King, Identity::Black },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Pawn, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral },
-
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Pawn, Identity::Black },
-
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-		Piece{ PieceType::King, Identity::Red }, Piece{ PieceType::Empty, Identity::Neutral }
-	};
 
 // All empty test board.
 static constexpr std::array<Piece, 64> s_defaultGameBoard =
 {
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+	// row 0
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+	// row 1
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+	// row 2
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+	// row 3
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+	// row 4
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+	// row 5
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
+	// row 6
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral },
-    Piece{ PieceType::Empty, Identity::Neutral }, Piece{ PieceType::Empty, Identity::Neutral }
+	// row 7
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece
+};
+
+
+// hint test 2
+static constexpr std::array<Piece, 64> s_defaultGameBoard =
+{
+	// row 0
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+
+	// row 1
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece,
+
+	// row 2
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+
+	// row 3
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+
+	// row 4
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+
+	// row 5
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece,
+
+	// row 6
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+
+	// row 7
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redKing, GameBoardStatics::s_emptyPiece,
+	GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece
 };

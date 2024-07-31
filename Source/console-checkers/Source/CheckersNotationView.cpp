@@ -7,11 +7,11 @@
 
 #include "GameSettings.h"
 #include "UITextStrings.h"
+#include "Utility.h"
 
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/bundled/format.h>
 
-#include <array>
 #include <sstream>
 
 namespace Checkers {
@@ -23,6 +23,7 @@ namespace Checkers {
 
 // Environment colors.
 static constexpr std::string_view s_pieceBackgroundColor = "\033[48;5;233m";
+static constexpr std::string_view s_hintBackgroundColor = "\033[48;5;228m";
 static constexpr std::string_view s_resetColor = "\033[0m";
 
 // Piece colors
@@ -32,13 +33,19 @@ static constexpr std::string_view s_blackPawnColor = "\033[38;5;33m";
 static constexpr std::string_view s_blackKingColor = "\033[38;5;117m";
 static constexpr std::string_view s_emptySquareColor = "\033[38;5;102m";
 
+static constexpr std::string_view s_redPawnColorHint = "\033[38;5;160m";
+static constexpr std::string_view s_redKingColorHint = "\033[38;5;202m";
+static constexpr std::string_view s_blackPawnColorHint = "\033[38;5;24m";
+static constexpr std::string_view s_blackKingColorHint = "\033[38;5;74m";
+static constexpr std::string_view s_emptySquareColorHint = "\033[38;5;239m";
+
 // You only see this if there's an error with finding the piece color.
 static constexpr std::string_view s_errorColor = "\033[38;5;206m";
 
 // In Checkers notation, the first numbered position is 1.
 static constexpr int32_t s_positionStart = 1;
 
-static std::string_view GetColorForPiece(const Piece& piece)
+static std::string_view GetColorForPiece(const Piece& piece, bool shouldShowHint)
 {
 	static const std::unordered_map<Piece, std::string_view, PieceHash> s_colorMap =
 	{
@@ -49,8 +56,18 @@ static std::string_view GetColorForPiece(const Piece& piece)
 		{ { PieceType::King, Identity::Black }, s_blackKingColor },
 	};
 
-	const auto it = s_colorMap.find(piece);
-	if (it != s_colorMap.end())
+	static const std::unordered_map<Piece, std::string_view, PieceHash> s_colorHighlightMap =
+	{
+		{ { PieceType::Empty, Identity::Neutral }, s_emptySquareColorHint },
+		{ { PieceType::Pawn, Identity::Red }, s_redPawnColorHint },
+		{ { PieceType::King, Identity::Red}, s_redKingColorHint },
+		{ { PieceType::Pawn, Identity::Black }, s_blackPawnColorHint },
+		{ { PieceType::King, Identity::Black }, s_blackKingColorHint },
+	};
+
+	const auto& relevantColorMap = shouldShowHint ? s_colorHighlightMap : s_colorMap;
+	const auto it = relevantColorMap.find(piece);
+	if (it != relevantColorMap.end())
 	{
 		return it->second;
 	}
@@ -97,7 +114,8 @@ struct CheckersNotationInputSettings {
 CheckersNotationView::CheckersNotationView() = default;
 CheckersNotationView::~CheckersNotationView() = default;
 
-std::string CheckersNotationView::GetGameBoardDisplayText(const std::vector<Piece>& gameBoard) const
+std::string CheckersNotationView::GetGameBoardDisplayText(const std::vector<Piece>& gameBoard,
+	const std::vector<int32_t>& hintIndices) const
 {
 	std::stringstream ss;
 
@@ -115,11 +133,11 @@ std::string CheckersNotationView::GetGameBoardDisplayText(const std::vector<Piec
 
 				// We will add a 0 character for alignment on values below 0.
 				const bool shouldAddZero = position < 10;
-
+				const bool isHint = std::ranges::find(hintIndices, Utility::ToGameBoardIndexFromCoord({row, col}) ) != hintIndices.end();
 				// {text brush color set}{background brush set}{0 if needed}{position}{reset brush color}
 				std::string coloredPiece = fmt::format("{}{}{}{}{}",
-					GetColorForPiece(piece),
-					s_pieceBackgroundColor,
+					GetColorForPiece(piece, isHint),
+					isHint ? s_hintBackgroundColor : s_pieceBackgroundColor,
 					shouldAddZero ? "0" : "",
 					position++,
 					s_resetColor);

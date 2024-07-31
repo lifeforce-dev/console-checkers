@@ -62,11 +62,35 @@ public:
 	bool Execute(Game* game) override;
 
 	// HelpCommand shouldn't have any reason to cancel.
-	void Cancel() override {/*NYI*/};
+	void Cancel() override { /*NYI*/ }
 	bool IsCanceled() const override { return false; }
 
 	const CommandErrorInfo& GetErrorInfo() override;
 };
+
+//---------------------------------------------------------------
+
+class HintCommand : public ICommand
+{
+public:
+	HintCommand(const HintCommand& other) = delete;
+	HintCommand& operator=(const HintCommand& other) = delete;
+	HintCommand(HintCommand&& other) noexcept = default;
+	HintCommand& operator=(HintCommand&& other) noexcept = default;
+
+	HintCommand() = default;
+	virtual ~HintCommand() override;
+
+	// ICommandImpl
+	bool Execute(Game* game) override;
+
+	// Hint command shouldn't have any reason to cancel.
+	void Cancel() override { /*NYI*/ }
+	bool IsCanceled() const override { return false; }
+
+	const CommandErrorInfo& GetErrorInfo() override;
+};
+
 
 //---------------------------------------------------------------
 

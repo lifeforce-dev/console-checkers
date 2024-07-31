@@ -57,6 +57,12 @@ void ConsoleGameDisplay::Initialize(IGameStateDisplayInfo* displayData, UIEvents
 		}
 	});
 
+	events.GetPiecePromotedEvent().subscribe(
+	[this]()
+	{
+		std::cout << fmt::format("{} Kings a piece!\n", m_gameStateInfo->GetTurnPlayerId());
+	});
+
 	events.GetHelpPromptRequestedEvent().subscribe(
 		[this]()
 	{
@@ -135,6 +141,16 @@ void ConsoleGameDisplay::Initialize(IGameStateDisplayInfo* displayData, UIEvents
 		}
 	});
 
+	events.GetDisplayHintRequestedEvent().subscribe(
+		[this]()
+	{
+		const std::string gameUI = fmt::format("\n{}\n{}",
+			"-------------------------------------",
+			GetFullGameDisplayText());
+
+		std::cout << gameUI;
+	});
+
 	m_isInitialized = true;
 }
 
@@ -148,7 +164,8 @@ std::string ConsoleGameDisplay::GetGameBoardDisplay() const
 	assert(m_gameBoardView);
 #endif
 
-	return m_gameBoardView->GetGameBoardDisplayText(m_gameStateInfo->GetGameBoardData());
+	return m_gameBoardView->GetGameBoardDisplayText(m_gameStateInfo->GetGameBoardData(),
+		m_gameStateInfo->GetBestHintIndices());
 }
 
 std::string ConsoleGameDisplay::GetFullGameDisplayText() const

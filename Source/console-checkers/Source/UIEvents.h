@@ -27,6 +27,10 @@ public:
 	using HelpPromptRequestedEvent = observable::subject<void()>;
 	HelpPromptRequestedEvent& GetHelpPromptRequestedEvent() { return m_helpPromptRequestedEvent; }
 
+	// A player has requested hints. We will show the best available move.
+	using DisplayHintsRequestedEvent = observable::subject<void()>;
+	DisplayHintsRequestedEvent& GetDisplayHintRequestedEvent() { return m_displayHintsRequestedEvent; }
+
 	// An error occurred with a command and the player should be informed.
 	using CommandErrorPromptRequestedEvent = observable::subject<void(const std::string&)>;
 	CommandErrorPromptRequestedEvent& GetCommandErrorPromptRequestedEvent() { return m_commandErrorPromptRequestedEvent; }
@@ -75,6 +79,7 @@ private:
 	PiecePromotedEvent m_piecePromotedEvent;
 	WinConditionMetEvent m_winConditionMetEvent;
 	AdditionalPieceCaptureRequiredEvent m_additionalPieceCaptureRequiredEvent;
+	DisplayHintsRequestedEvent m_displayHintsRequestedEvent;
 
 
 };

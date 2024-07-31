@@ -78,6 +78,27 @@ inline glm::ivec2 GetDirectionBetweenTwoIndices(int32_t sourceIndex, int32_t des
 	return NormalizeDirection(direction);
 }
 
+inline std::string DirectionToString(const glm::ivec2& direction)
+{
+	if (direction == GameBoardStatics::s_up)
+		return "up";
+	if (direction == GameBoardStatics::s_down)
+		return "down";
+	if (direction == GameBoardStatics::s_left)
+		return "left";
+	if (direction == GameBoardStatics::s_right)
+		return "right";
+	if (direction == GameBoardStatics::s_upLeft)
+		return "up_left";
+	if (direction == GameBoardStatics::s_upRight)
+		return "up_right";
+	if (direction == GameBoardStatics::s_downLeft)
+		return "down_left";
+	if (direction == GameBoardStatics::s_downRight)
+		return "downRight";
+	return {};
+}
+
 //===============================================================
 
 }

@@ -25,6 +25,7 @@ namespace Checkers {
 static constexpr unsigned char s_helpCommandId = 'h';
 static constexpr unsigned char s_changeStyleCommandId = 's';
 static constexpr unsigned char s_moveCommandId = 'm';
+static constexpr unsigned char s_hintCommand = 'i';
 
 struct CommandResult {
 	CommandResult(const CommandResult& other) = delete;
@@ -57,6 +58,13 @@ public:
 			[](const std::vector<std::string>& args) -> CommandResult
 		{
 			return { std::make_unique<HelpCommand>() };
+		};
+
+		// Register the hint command.
+		m_commandRegistry[s_hintCommand] =
+			[](const std::vector<std::string>& args)->CommandResult
+		{
+			return { std::make_unique<HintCommand>() };
 		};
 
 		// Register the style change command.
