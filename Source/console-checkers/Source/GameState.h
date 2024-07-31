@@ -133,7 +133,8 @@ private:
 	// Returns the player state for a given identity.
 	PlayerState* GetPlayerStateForId(Identity id) const;
 
-	// Given a source index, tests a destination and returns true if it is a valid move.
+	// TODO: This function needs a refactor due to its complexity.
+	// Given a source, discovers all possilble moves, captures, and builds the maximal capture chain.
 	void AddAvailableMovesForPieceIndex(int32_t source);
 
 	// Given two pieces, checks and returns their affinity.

@@ -26,7 +26,7 @@ struct GameplaySettings {
 	// These are the only directions a black pawn may move.
 	static constexpr std::array<glm::ivec2, 2> s_blackPawnDirections = { GameBoardStatics::s_downLeft, GameBoardStatics::s_downRight };
 
-	// Default Board Setup
+	// Default Board Setup. The game board is initialized with this one.
 	static constexpr std::array<Piece, 64> s_defaultGameBoard =
 	{
 		// row 0
