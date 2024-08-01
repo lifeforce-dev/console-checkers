@@ -92,6 +92,10 @@ void MoveDiscoveryEngine::ResetDiscoveredMoves()
 	m_moveHints.clear();
 }
 
+// FIXME: Clean this function up a bit. I don't think I will break it up, it turns out that actually hurts
+// readability and makes it more difficult to debug. There's not a lot of reusable or repeated bits in here,
+// its just doing a lot. But cleaning up some of the variable definitions and using member variables when
+// possible could help.
 void MoveDiscoveryEngine::DiscoverMovesForSourceIndex(int32_t sourceIndex)
 {
 	if (!Utility::IsValidGameBoardIndex(sourceIndex))
