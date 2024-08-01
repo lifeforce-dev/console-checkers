@@ -120,8 +120,6 @@ void MoveDiscoveryEngine::DiscoverMovesForSourceIndex(int32_t sourceIndex)
 	}
 
 	spdlog::info("Starting search for {} piece at {}", m_gameState->GetTurnPlayerId(), sourceIndex);
-	// If we found a capture and are looking for more, moves are irrelevant.
-	bool isSearchingForAdditionalCaptures = false;
 
 	// | Begin discovering moves
 	while (!evalStateStack.empty())
@@ -134,7 +132,7 @@ void MoveDiscoveryEngine::DiscoverMovesForSourceIndex(int32_t sourceIndex)
 		evalStateStack.pop_back();
 
 		// | Determine whether this evaluation context results in a move, or a capture, or a noop.
-		if (DoesDescribeMove(moveEval) && !isSearchingForAdditionalCaptures)
+		if (DoesDescribeMove(moveEval))
 		{
 			// | Record the move as an option the player has. We already have the source index, we just need the dest index.
 			//   which we can calculate by passing the dest coord.
