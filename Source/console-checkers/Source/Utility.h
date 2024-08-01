@@ -10,6 +10,13 @@
 
 #include <cstdint>
 #include <numeric>
+#include <span>
+
+#include <spdlog/spdlog.h>
+// Magic include needed for spdlog to log a custom type.
+// Must be included after spdlog.h. Thanks spdlog.
+#include <spdlog/fmt/ostr.h>
+#include <spdlog/fmt/ranges.h>
 
 namespace Checkers {
 namespace Utility {
@@ -78,6 +85,29 @@ inline glm::ivec2 GetDirectionBetweenTwoIndices(int32_t sourceIndex, int32_t des
 	return NormalizeDirection(direction);
 }
 
+inline std::span<const glm::ivec2> GetDirectionsForPiece(const Piece& piece)
+{
+	if (piece == GameBoardStatics::s_redPawn)
+	{
+		return GameplaySettings::s_redPawnDirections;
+	}
+	if (piece == GameBoardStatics::s_blackPawn)
+	{
+		return GameplaySettings::s_blackPawnDirections;
+	}
+	if (piece == GameBoardStatics::s_blackKing || piece == GameBoardStatics::s_redKing)
+	{
+		return GameplaySettings::s_kingDirections;
+	}
+#ifdef DEBUG
+	spdlog::error("Attempted to get directions for an unknown piece. piece={}", piece);
+	// I want to know if we get here, it means something is wrong with our equality check.
+	assert(false);
+#endif
+
+	return {};
+}
+
 inline std::string DirectionToString(const glm::ivec2& direction)
 {
 	if (direction == GameBoardStatics::s_up)
@@ -97,6 +127,16 @@ inline std::string DirectionToString(const glm::ivec2& direction)
 	if (direction == GameBoardStatics::s_downRight)
 		return "downRight";
 	return {};
+}
+
+inline Affinity GetPieceAffinity(const Identity sourcePieceIdentity, const Identity destPieceIdentity)
+{
+	if (sourcePieceIdentity == Identity::Neutral || destPieceIdentity == Identity::Neutral)
+	{
+		return Affinity::Neutral;
+	}
+
+	return sourcePieceIdentity == destPieceIdentity ? Affinity::Friendly : Affinity::Enemy;
 }
 
 //===============================================================
