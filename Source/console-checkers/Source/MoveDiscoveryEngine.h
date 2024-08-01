@@ -89,8 +89,14 @@ private:
 	// Returns a string representation for list of MoveEvaluationContext
 	std::string MoveEvalDescStackToString(const std::deque<MoveEvaluationContext>& desc) const;
 
+	void InitMoveStateStack(const glm::ivec2& sourceCoord);
+	void HandleMoveDiscovered(const MoveEvaluationContext& moveEval);
+	void HandleCaptureDiscovered(const MoveEvaluationContext& moveEval);
+	bool CheckLookaheadCapture(const MoveEvaluationContext& moveEval);
+	MoveEvaluationContext CreateLookaheadCaptureContext(const MoveEvaluationContext& moveEval);
+
 	// Used in a DFS to find all available moves, captures, and the maximal capture chain.
-	std::deque<MoveEvaluationContext> m_moveStateStack;
+	std::deque<MoveEvaluationContext> m_moveDiscoveryStack;
 
 	// Contains the list of moves a player available that results in the highest number of captures.
 	std::vector<PieceMoveDescription> m_maximalCaptureChain;

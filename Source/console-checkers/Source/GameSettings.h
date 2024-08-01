@@ -30,36 +30,36 @@ struct GameplaySettings {
 	static constexpr std::array<Piece, 64> s_defaultGameBoard =
 	{
 		// row 0
-		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
-		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
 		// row 1
-		GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece,
-		GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+		GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece,
 
 		// row 2
-		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
-		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
 		// row 3
 		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
 		// row 4
-		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
 		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
 		// row 5
-		GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece,
-		GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece,
 
 		// row 6
-		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn,
-		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_blackPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece,
 
 		// row 7
-		GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece,
-		GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redPawn, GameBoardStatics::s_emptyPiece
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_redKing, GameBoardStatics::s_emptyPiece,
+		GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece, GameBoardStatics::s_emptyPiece
 	};
 
 	// The magnitude to apply to a direction in order to move a piece. (1 space).
@@ -82,6 +82,9 @@ struct GameplaySettings {
 
 	// Official Checkers rules states that an exact game state cannot reappear 3 times, or the game ends in a draw.
 	static constexpr int32_t s_gameStateRuleCount = 3;
+
+	// Used to guide initialization of part of our game state.
+	static constexpr int32_t s_theoreticalMaxCaptureCount = 12;
 
 	// Default game board view strat.
 	static constexpr GameBoardViewStrategyId s_defaultGameBoardViewStrategy = GameBoardViewStrategyId::CheckersNotation;
