@@ -35,8 +35,14 @@ size_t PlayerState::GetPiecesCount(const std::vector<Piece>& gameBoard) const
 		return piece.identity == m_identity;
 	};
 
+	// TODO: felt cute. might delete later.
 	auto piecesView = gameBoard | std::ranges::views::filter(isMyPiece);
 	return std::ranges::distance(piecesView);
+
+	// Alternatively:
+	//return std::ranges::count_if(std::cbegin(gameBoard), std::cend(gameBoard), isMyPiece);
+	//or
+	//return std::count_if(std::cbegin(gameBoard), std::cend(gameBoard), isMyPiece);
 }
 
 //===============================================================
