@@ -13,8 +13,9 @@ namespace Checkers {
 
 class IGameBoardViewStrategy;
 
-// These events are designed to provide a way for the game to indicate that user
-// notification or input is needed.
+// These events are intended to be one direction notifications from the game to the display.
+// The intention is that we could completely rip out the display and rewrite it with whatever we want
+// (SFML GUI, OpenGL, Direct X, imgui, etc), and so long as the display hooks up these events, everything should work.
 class UIEvents
 {
 public:
@@ -80,8 +81,6 @@ private:
 	WinConditionMetEvent m_winConditionMetEvent;
 	AdditionalPieceCaptureRequiredEvent m_additionalPieceCaptureRequiredEvent;
 	DisplayHintsRequestedEvent m_displayHintsRequestedEvent;
-
-
 };
 
 //===============================================================
