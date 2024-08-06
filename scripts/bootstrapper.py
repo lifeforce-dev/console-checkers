@@ -72,6 +72,33 @@ class PackageCheckBoxGroupItem:
         self.dropdown_item = dropdown_item
 
 
+def copy_modified_gitignore(source, destination):
+    print("Copy modified gitignore")
+    gitignore_path = source / '.gitignore'
+    destination_path = destination / '.gitignore'
+    
+    # Read the original .gitignore file
+    with gitignore_path.open('r') as file:
+        lines = file.readlines()
+
+    # We actually want generated projects to commit these files. This is how the Update
+    # system knows how to update itself.
+    lines_to_remove = [
+        "# Removed in UPDATE mode.\n",
+        "/dependencies.json\n",
+        "premake/generated/package_info.lua\n",
+        "/settings.ini\n",
+    ]
+
+    modified_lines = [line for line in lines if line not in lines_to_remove]
+
+    # Write the modified lines to the destination .gitignore
+    with destination_path.open('w') as file:
+        file.writelines(modified_lines)
+
+    print(f"Modified .gitignore copied to {destination_path}")
+
+
 class PackageSelectorGUI:
     def __init__(self):
         self.selected_packages = set()
@@ -233,6 +260,7 @@ class PackageSelectorGUI:
         self.update_dependencies()
 
     def on_generate_clicked(self, sender, app_data, user_data):
+        print("BREAKPOINT SHOULD BE HIT LIKE WTF")
         dpg.set_value(self.status_text_id, "")
         self.set_ui_enabled(False)
         self.solution_name = dpg.get_value(self.solution_name_input_id)
@@ -255,6 +283,7 @@ class PackageSelectorGUI:
 
     def on_update_clicked(self, sender, app_data, user_data):
         self.fetch_packages(self.get_checked_packages())
+        self.generate_package_info_lua()
         self.execute_premake(SLN_DIR)
 
 
@@ -340,7 +369,8 @@ class PackageSelectorGUI:
         shutil.copytree(SLN_DIR / 'scripts', solution_dir / 'scripts', dirs_exist_ok=True)
 
         # Might as well copy this over too, as it includes a lot of script/premake related paths.
-        shutil.copy2(SLN_DIR / '.gitignore', solution_dir)
+        #shutil.copy2(SLN_DIR / '.gitignore', solution_dir)
+        copy_modified_gitignore(SLN_DIR, solution_dir)
 
         # Create settings.ini and Source directory
         with open(solution_dir / 'settings.ini', 'w', encoding='utf-8') as file:
@@ -412,7 +442,7 @@ class PackageSelectorGUI:
         os.chdir(solution_dir)
         try:
             batch_file_path = solution_dir / 'run_bootstrapper.bat'
-            python_script_path = solution_dir / 'scripts' / 'bootstrapper.py'
+            python_script_path = Path('scripts') / 'bootstrapper.py'
             with open(batch_file_path, 'w') as batch_file:
                 batch_file.write(f'@echo off\n')
                 batch_file.write(f'python "{python_script_path}"\n')
