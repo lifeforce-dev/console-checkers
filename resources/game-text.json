@@ -1,0 +1,58 @@
+{
+    "WELCOME_MESSAGE": {
+      "text": "\\t\\tWelcome to Checkers!\\nh or help for command information",
+      "comment": "Displayed as the opening message when the game starts."
+    },
+    "GLYPH_BOARD_SLOT": {
+      "text": "[{}]",
+      "comment": "This is how a board square will be represented. ex. [b][.][B]"
+    },
+    "HELP_COMMAND_PROMPT_MESSAGE": {
+      "text": "\\nAvailable Commands:\\n\\nHelp:\\n    Description: Displays all available commands and their usage.\\n    Syntax: h | help\\n    Example: help\\n\\nMove:\\n    Description: Moves a piece from one position to another.\\n    Syntax: m | move <source> <destination>\\n    {}\\n\\nHint:\\n    Description: Highlights the best available move.\\n    Syntax: i | info\\n    Example: i\\n\\nChange Style:\\n    Description: Changes the visual style of the game board.\\n    Syntax: s | style <style number>\\n    Example: s 1\\n",
+      "comment": "Gives a rundown of the various commands available"
+    },
+    "MOVE_COMMAND_HELP_EXAMPLE_CHECKERS_NOTATION": {
+      "text": "Example: m 23 18",
+      "comment": "Syntax example for the move command for a checkers notation view."
+    },
+    "MOVE_COMMAND_HELP_EXAMPLE_CHESS_LIKE_VIEW": {
+      "text": "Example: m g3 f4",
+      "comment": "Syntax example for the move command for a chess like view."
+    },
+    "ERROR_COMMAND_CHANGE_STYLE": {
+      "text":"Style change failed. Reason={}. \\nSelect from:{}",
+      "comment": "First param should explain why, second param should show the available options."
+    },
+    "ERROR_COMMAND_CHANGE_STYLE_REASON_ALREADY_SELECTED": {
+      "text": "View already selected",
+      "comment": "The player tried to change the view to the one that's already selected."
+    },
+    "ERROR_COMMAND_CHANGE_STYLE_REASON_NOT_FOUND": {
+      "text": "Style not found",
+      "comment": "The player selected a style that doesn't exist or is otherwise invalid."
+    },
+    "ERROR_COMMAND_REASON_INVALID_ARUMENT": {
+      "text": "Invalid Aruments",
+      "comment": "The player entered a malformed command."
+    },
+    "ERROR_COMMAND_REASON_INVALID_COMMAND": {
+      "text": "Not a command",
+      "comment": "Tried to execute a command that was not registered."
+    },
+    "ERROR_COMMAND_REASON_UNKNOWN": {
+      "text": "Unknown",
+      "comment": "We hit an error case that we're not explicitly handling."
+    },
+    "ERROR_COMMAND_UNKNOWN": {
+      "text": "Not a valid command.",
+      "comment": "The player tried to invoke a command that doesn't exist."
+    },
+    "ERROR_COMMAND_MOVE_REASON_INVALID_MOVE_DESCRIPTION": {
+      "text": "Move command not understood.",
+      "comment": "The player entered a move command that resulted in coords going off of the board."
+    },
+    "ERROR_COMMAND_MOVE": {
+      "text": "Invalid Move command. Reason={}. \\nExpected Syntax | m <source> <destination> | {}",
+      "comment": "The player entered a move command that we didn't understand."
+    }
+  }
