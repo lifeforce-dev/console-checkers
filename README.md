@@ -32,7 +32,7 @@ Dependencies to select in the GUI (if not already selected):
 - Win conditions
   - Draw by Game State rule
   - Draw by No Possible Moves
-  - Win by control all pieces
+  - Win by control all enemy pieces
   
 
 # Notable Edge cases handled
