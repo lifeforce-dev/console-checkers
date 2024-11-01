@@ -1,0 +1,321 @@
+//---------------------------------------------------------------
+//
+// GameTypes.h
+//
+
+#pragma once
+
+#include <cstdint>
+#include <functional>
+#include <ostream>
+
+#include "glm/vec2.hpp"
+
+namespace Checkers {
+
+//===============================================================
+
+enum class PieceType : int32_t
+{
+	// Indicates no piece.
+	Empty,
+
+	// Indicates the piece is a pawn.
+	Pawn,
+
+	// Indicates the piece is a king.
+	King
+};
+
+inline std::ostream& operator<<(std::ostream&os, PieceType pieceType)
+{
+	switch (pieceType)
+	{
+	case PieceType::Empty:
+		os << "Empty";
+		break;
+	case PieceType::Pawn:
+		os << "Pawn";
+		break;
+	case PieceType::King:
+		os << "King";
+		break;
+	default:
+		os << "Unknown";
+		break;
+	}
+	return os;
+}
+
+// Determines how its owner can interact with the game as well as is displayed.
+enum class Identity : int32_t
+{
+	// Empty spaces will be neutral to any other piece.
+	Neutral,
+
+	// Black player will be displayed as black and moves second.
+	Black,
+
+	// Red player will be displayed as red and move first.
+	Red,
+};
+
+// TODO: these strings should use UIText::
+inline std::ostream& operator<<(std::ostream& os, Identity id)
+{
+	switch (id)
+	{
+	case Identity::Neutral:
+		os << "Neutral";
+		break;
+	case Identity::Black:
+		os << "Black Player";
+		break;
+	case Identity::Red:
+		os << "Red Player";
+		break;
+	default:
+		os << "Unknown";
+		break;
+	}
+	return os;
+}
+
+// Inspired by boost, simple hash combine for hashing custom structs.
+template <class T>
+inline void hash_combine(std::size_t& s, const T& v)
+{
+	// Adding a value like this helps mix the bits
+	constexpr std::size_t s_magicConstant = 0x9e3779b9;
+
+	// The goal is to produce the same hash for a given combination of objects, but that the hash is unique enough to
+	// not need to worry about collisions.
+
+	// ^ is XOR, and ^= is used to combine the hash of v to the total hash.
+	// shifting bits around left and right ensures that small changes to the input sequence
+	// result in significantly different hash values.
+
+	std::hash<T> h;
+	s ^= h(v) + s_magicConstant + (s << 6) + (s >> 2);
+}
+
+struct PieceMoveDescription
+{
+	// Index into the game board where the source piece is.
+	int32_t sourceIndex = 0;
+
+	// Index into the game board where the piece will be moved to.
+	int32_t destIndex = 0;
+
+	bool operator==(const PieceMoveDescription& other) const
+	{
+		return sourceIndex == other.sourceIndex && destIndex == other.destIndex;
+	}
+};
+inline std::ostream& operator<<(std::ostream& os, const PieceMoveDescription& move)
+{
+	os << "[" << move.sourceIndex << ", " << move.destIndex << "]";
+	return os;
+}
+
+struct PieceMoveDescriptionHash
+{
+	std::size_t operator()(const PieceMoveDescription& move) const
+	{
+		std::size_t hash = 0;
+		hash_combine(hash, move.sourceIndex);
+		hash_combine(hash, move.destIndex);
+		return hash;
+	}
+};
+
+struct PieceMoveHint
+{
+	// Used to sort this hint.
+	// A capture chain with 1 entry indicates a basic move with no captures, and so the score will be 0.
+	// 2 entries indicates 1 capture and its score will be 1, etc.
+	size_t score = 0;
+
+	// For a base move (first entry), the series of moves resulting in the highest number of captures.
+	std::vector<PieceMoveDescription> captureChain;
+};
+
+enum class MoveEvaluation : int32_t
+{
+	// The move was not a valid one in any capacity.
+	Invalid,
+
+	// The player is able to move their piece (1 space).
+	MoveAvailable,
+
+	// The move is a capture (2 spaces).
+	CaptureAvailable
+};
+
+struct Piece
+{
+	// Determines how the piece can move.
+	PieceType pieceType;
+
+	// Determines when this piece can move.
+	Identity identity;
+
+	// Uniquely identifies this specific piece.
+	int32_t uid = 0;
+
+	// The combined Piece Type and Identity make up the logical identity of a piece.
+	// Therefore, those are the only values that we include in the hash and equality operator.
+	bool operator==(const Piece& other) const
+	{
+		return pieceType == other.pieceType && identity == other.identity;
+	}
+};
+inline std::ostream& operator<<(std::ostream& os, const Piece& piece)
+{
+	os << "PieceType: " << piece.pieceType << ", Identity: " << piece.identity;
+	return os;
+}
+
+struct PieceHash
+{
+	std::size_t operator()(const Piece& piece) const
+	{
+		std::size_t hash = 0;
+		hash_combine(hash, piece.pieceType);
+		hash_combine(hash, piece.identity);
+		return hash;
+	}
+};
+
+// Used in capture logic to determine whether a capture is available.
+enum class Affinity : int32_t
+{
+	// This is really only possible by comparing two neutral pieces.
+	Neutral,
+
+	// Two pieces owned by players of differing colors are enemies.
+	Enemy,
+
+	// Two pieces owned by players of same colors are friendlies.
+	Friendly
+};
+
+enum class WinConditionReason : int32_t
+{
+	// No win condition determined.
+	None,
+
+	// A player has captured all enemy pieces.
+	AllEnemyPiecesCapturedWin,
+
+	// The player finds themself with pieces but nowhere to move them.
+	NoAvailableMovesLoss,
+
+	// The exact same game state has been achieved 3 times.
+	GameStateViolationDraw
+};
+
+// A view strategy is responsible for implementing and translating between
+// what the player sees and what the game understands. This enum identifies a
+// particular view strategy.
+enum class GameBoardViewStrategyId
+{
+	// Start of the options.
+	Invalid = 0,
+
+	// Displays board with chess notation and glyphs, and understand how to interpret input in that format.
+	ChessLikeView,
+
+	// Displays board with checkers notation, and understand how to interpret input in that format.
+	CheckersNotation,
+
+	// Number of options.
+	End = 3
+};
+
+// TODO: these strings should use UIText::
+inline std::ostream& operator<<(std::ostream& os, GameBoardViewStrategyId id)
+{
+	switch (id)
+	{
+	case GameBoardViewStrategyId::Invalid:
+		os << "Invalid";
+		break;
+	case GameBoardViewStrategyId::ChessLikeView:
+		os << "ChessLikeView";
+		break;
+	case GameBoardViewStrategyId::CheckersNotation:
+		os << "CheckersNotation";
+		break;
+	case GameBoardViewStrategyId::End:
+		os << "(End) Invalid";
+		break;
+	default:
+		os << "Invalid";
+		break;
+	}
+	return os;
+}
+
+struct GameBoardStatics
+{
+	// Often used for failure to get a valid index.
+	static constexpr int32_t s_invalidBoardIndex = -1;
+
+	// Static helper pieces we can check against when performing game logic.
+	static constexpr Piece s_redPawn { PieceType::Pawn, Identity::Red };
+	static constexpr Piece s_redKing{ PieceType::King, Identity::Red };
+	static constexpr Piece s_blackPawn{ PieceType::Pawn, Identity::Black };
+	static constexpr Piece s_blackKing{ PieceType::King, Identity::Black };
+	static constexpr Piece s_emptyPiece{ PieceType::Empty, Identity::Neutral };
+
+	// 2d array index directions go by row col.
+	static constexpr glm::ivec2 s_up = glm::ivec2(-1, 0);
+	static constexpr glm::ivec2 s_down = glm::ivec2(1, 0);
+	static constexpr glm::ivec2 s_left = glm::ivec2(0, -1);
+	static constexpr glm::ivec2 s_right = glm::ivec2(0, 1);
+
+	// Define diagonal directions using primary directions
+	static constexpr glm::ivec2 s_upRight = s_up + s_right;
+	static constexpr glm::ivec2 s_upLeft = s_up + s_left;
+	static constexpr glm::ivec2 s_downRight = s_down + s_right;
+	static constexpr glm::ivec2 s_downLeft = s_down + s_left;
+};
+
+struct GameStateRecord
+{
+	Identity playerIdentity;
+	std::size_t gameBoardHash;
+	bool operator==(const GameStateRecord& other) const
+	{
+		return playerIdentity == other.playerIdentity && gameBoardHash== other.gameBoardHash;
+	}
+};
+
+struct GameStateRecordHash
+{
+	std::size_t operator()(const GameStateRecord& record) const
+	{
+		std::size_t hash = 0;
+		hash_combine(hash, record.playerIdentity);
+		hash_combine(hash, record.gameBoardHash);
+
+		return hash;
+	}
+};
+//===============================================================
+
+}
+
+// Need to tell raw hashes of Piece to use PieceHash.
+namespace std {
+
+	template <>
+	struct hash<Checkers::Piece>
+	{
+		std::size_t operator()(const Checkers::Piece& piece) const
+		{
+			return Checkers::PieceHash{}(piece);
+		}
+	};
+}
